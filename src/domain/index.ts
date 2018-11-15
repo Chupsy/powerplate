@@ -1,5 +1,7 @@
-import { Container } from "inversify";
-import { userFactoryModule } from "./user/user.module";
+import { ContainerModule, interfaces } from "inversify";
+import { UserFactory } from "./user/userFactory";
+import DOMAIN_IDENTIFIERS from "./identifiers";
 
-export const domainContainer = new Container();
-domainContainer.load(userFactoryModule)
+export const domainModule = new ContainerModule((bind: interfaces.Bind) => {
+    bind<UserFactory>(DOMAIN_IDENTIFIERS.UserFactory).to(UserFactory).inSingletonScope();
+});

@@ -1,6 +1,9 @@
-import { Container } from "inversify";
+import { ContainerModule, interfaces } from "inversify";
 import "reflect-metadata";
-import {userAppModule} from "./user/user.module";
+import UserApp from "./user/user.app";
+import APP_IDENTIFIERS from "./identifiers";
 
-export const appContainer = new Container();
-appContainer.load(userAppModule)
+
+export const appModule = new ContainerModule((bind: interfaces.Bind) => {
+    bind<UserApp>(APP_IDENTIFIERS.UserApp).to(UserApp).inSingletonScope();
+});

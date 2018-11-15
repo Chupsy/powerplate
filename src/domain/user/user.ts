@@ -1,4 +1,6 @@
 import { injectable } from "inversify";
+import { UserInfra } from "../../infra/user/userInfra";
+import { IUser } from "../../app/user/user.app";
 
 @injectable()
 export class User {
@@ -11,11 +13,17 @@ export class User {
     }
 
     public growUp() {
-        this.age ++;
+        this.age++;
     }
 
     public displayAge() {
         return `${this.name} is ${this.age} years old`;
     }
 
+    public toInterface(): IUser {
+        return {
+            age: this.age,
+            name: this.name
+        };
+    }
 }
