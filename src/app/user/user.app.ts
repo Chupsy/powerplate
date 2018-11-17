@@ -15,10 +15,15 @@ export default class UserApp {
     }
 
     public proceed(id: number): IUser {
-        const user1 = this.userFactory.createUser("vincent", id);
+        const user1 = this.userFactory.createUser({ name: "vincent", age: id });
         console.log(user1.displayAge());
         user1.growUp();
         console.log(user1.displayAge());
         return user1.toInterface();
+    }
+
+    public createUser(iUser: IUser): IUser {
+        const user = this.userFactory.createUser(iUser);
+        return user.toInterface();
     }
 }
