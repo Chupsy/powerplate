@@ -17,9 +17,6 @@ export class UserController implements interfaces.Controller {
 
     @httpPost("/", celebrate(createUserSchema), errors())
     public createUser(@request() req: express.Request, @response() res: express.Response): IUser {
-        return this.userApp.createUser({
-            age: req.body.age,
-            name: req.body.name
-        });
+        return this.userApp.createUser(req.body);
     }
 }

@@ -1,5 +1,4 @@
 import { injectable } from "inversify";
-import { UserInfra } from "../../infra/user/userInfra";
 import { IUser } from "../../app/user/user.app";
 
 @injectable()
