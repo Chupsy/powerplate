@@ -18,10 +18,13 @@ Technologies :
 Requires :
 
 -   User.app.ts (app layer)
-    Structure
+
+Structure
 
 ```
 |- index.ts
+|- constants
+    |- response.json
 |- components
     |- user
         |- schemas
@@ -35,10 +38,9 @@ Requires :
             |- delete.schema.spec.ts
         |- user.controller.ts
         |- user.controller.spec.ts
-|- middlewares
-    |- authenticate
-        |- index.ts
-        |- authenticate.spec.ts
+|- helpers
+    |- response_normalizer
+        |- response_normalizer.ts
 ```
 
 Routes :
@@ -46,11 +48,9 @@ Routes :
 -   GET /users/:userId
     -   schema :
         -   userId (number, positive, required)
-    -   middlewares :
-        -   authenticate
     -   Errors :
         -   data_not_found (404) => user not found
-        -   permission_denied (401) => asking user does not have permission to view this user
+        -   invalid_parameters (400)
     -   Success :
         -   user_found (200)
         ```
@@ -64,10 +64,7 @@ Routes :
         ```
 -   GET /users
     -   schema :none
-    -   middlewares :
-        -   authenticate
-    -   Errors :
-        -   permission_denied (401) => asking user is not admin
+    -   Errors : none
     -   Success :
         -   users_found (200)
         ```
@@ -90,12 +87,10 @@ Routes :
             -   lastName (string, min 2, optional, body)
             -   email (string, email, optional, body)
             -   age (number, min 0, optional, body)
-    -   middlewares :
-        -   authenticate
     -   Errors :
         -   data_not_found (404) => user not found
-        -   permission_denied (401) => asking user does not have permission to update this user
         -   email_already_used (400)
+        -   invalid_parameters (400)
     -   Success :
         -   user_updated (200)
         ```
@@ -110,11 +105,9 @@ Routes :
 -   DELETE /users/:userId
     -   schema :
         -   userId (number, positive, required)
-    -   middlewares :
-        -   authenticate
     -   Errors :
         -   data_not_found (404) => user not found
-        -   permission_denied (401) => asking user does not have permission to delete this user
+        -   invalid_parameters (400)
     -   Success :
         -   user_deleted (200)
 -   POST /users
@@ -123,11 +116,9 @@ Routes :
         -   lastName (string, min 2, required, body)
         -   email (string, email, required, body)
         -   age (number, min 0, required, body)
-    -   middlewares :
-        -   authenticate
     -   Errors :
-        -   permission_denied (401) => asking user does not have permission to create user
         -   email_already_used (400)
+        -   invalid_parameters (400)
     -   Success :
         -   user_created (201)
         ```
@@ -163,7 +154,60 @@ Not implemented yet
 
 ### App
 
-#### User
+Technologies :
+
+-   [Inversify](https://github.com/inversify/InversifyJS)
+
+Requires :
+
+-   User.domain.ts (domain layer)
+
+Structure :
+
+```
+|- index.ts
+|- user
+    |- user.app.ts
+```
+
+Methods :
+
+-   findAll
+    -   arguments : none
+    -   return users as array of object
+-   findOne
+    -   arguments : userId (number)
+    -   return user as object
+    -   Errors :
+        -   data_not_found
+-   create
+    -   arguments : object({
+        firstName: string,
+        lastName: string,
+        email: string,
+        age: number
+        })
+    -   return user as object
+    -   errors :
+        -   email_already_used
+        -   invalid_age
+-   update
+    -   arguments : userId (number), object({
+        firstName?: string,
+        lastName?: string,
+        email?: string,
+        age?: number
+        })
+    -   return user as object
+    -   errors :
+        -   email_already_used
+        -   data_not_found
+        -   invalid_age
+-   delete
+    -   arguments : userId number
+    -   void
+    -   errors :
+        -   data_not_found
 
 ### Domain
 
@@ -171,8 +215,63 @@ _Domain services hold domain logic whereas application services don’t._
 
 _Domain logic is everything that is related to business decisions. It holds the business decision where app only orchestrate those business decisions_
 
-#### User
+Technologies :
+
+-   [Inversify](https://github.com/inversify/InversifyJS)
+
+Requires :
+
+-   User.infra.ts (domain layer)
+
+Structure :
+
+```
+|- index.ts
+|- user
+    |- user.domain.ts
+    |- user.ts
+```
+
+userDomain methods :
+
+-   findOne
+    -   arguments : userId (number)
+    -   return User.toJSON
+    -   errors :
+        -   data_not_found
+-   findAll
+    -   arguments : none
+    -   return array of User.toJSON
+    -   errors : none
+-   update
+    -   arguments : userId (number), object({
+        firstName?: string,
+        lastName?: string,
+        email?: string,
+        age?: number
+        })
+    -   return User.toJSON
+    -   errors :
+        -   data_not_found
+        -   email_alread_used
+        -   invalid_age
+-   create
+    -   arguments : object({
+        firstName?: string,
+        lastName?: string,
+        email?: string,
+        age?: number
+        })
+    -   return User.toJSON
+    -   errors :
+        -   email_already_used
+        -   invalid_age
+-   delete
+    -   arguments : userId(number)
+    -   void
+    -   errors :
+        -   data_not_found
 
 ### Infra
 
-#### User
+### Errors

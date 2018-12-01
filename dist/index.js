@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("reflect-metadata");
+var inversify_1 = require("inversify");
+var http_1 = require("./interface/http");
+var app_1 = require("./app");
+var loaderContainer = new inversify_1.Container();
+loaderContainer.load(app_1.appModule);
+loaderContainer.load(http_1.httpInterfaceModule);
+http_1.init(loaderContainer);

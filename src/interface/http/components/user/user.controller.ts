@@ -1,22 +1,19 @@
-import { interfaces, httpGet, controller, requestParam, httpPost, request, response } from "inversify-express-utils";
-import { inject } from "inversify";
-import APP_IDENTIFIERS from "../../../../app/identifiers";
-import UserApp, { IUser } from "../../../../app/user/user.app";
-import { celebrate, errors } from "celebrate";
-import { getUserByIdSchema, createUserSchema } from "./schemas/basic.schema";
-import express = require("express");
+import { interfaces, httpGet, controller, requestParam, response } from 'inversify-express-utils';
+import { inject } from 'inversify';
+import APP_IDENTIFIERS from '../../../../app/identifiers';
+import { celebrate, errors } from 'celebrate';
+import express = require('express');
+import { userFindOneSchema } from './schemas/read.schema';
+import responseNormalizer from '../../helpers/response_normalizer';
+import UserApp from '../../../../app/user/user.app';
 
-@controller("/users")
+@controller('/users')
 export class UserController implements interfaces.Controller {
     constructor(@inject(APP_IDENTIFIERS.UserApp) private userApp: UserApp) {}
 
-    @httpGet("/:id", celebrate(getUserByIdSchema), errors())
-    public getUser(@requestParam("id") id: number): IUser {
-        return this.userApp.proceed(id);
-    }
-
-    @httpPost("/", celebrate(createUserSchema), errors())
-    public createUser(@request() req: express.Request, @response() res: express.Response): IUser {
-        return this.userApp.createUser(req.body);
+    @httpGet('/:userId', celebrate(userFindOneSchema))
+    public getUser(@requestParam('userId') id: number, @response() res: express.Response): void {
+        const user = this.userApp.findUserById(id);
+        responseNormalizer(res, 'user_found', user);
     }
 }

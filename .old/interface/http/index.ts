@@ -3,7 +3,6 @@ import { InversifyExpressServer } from 'inversify-express-utils';
 import bodyParser = require('body-parser');
 import { UserController } from './components/user/user.controller';
 import HTTP_INTERFACE_IDENTIFIERS from './identifiers';
-import momus from './middlewares/momus';
 
 export const httpInterfaceModule = new ContainerModule((bind: interfaces.Bind) => {
     bind<UserController>(HTTP_INTERFACE_IDENTIFIERS.UserController)
@@ -23,11 +22,7 @@ export function init(container: Container) {
         );
         app.use(bodyParser.json());
     });
-    server.setErrorConfig(app => {
-        app.use(momus);
-    });
 
     let serverInstance = server.build();
     serverInstance.listen(3000);
-    console.log('Server is ready');
 }
