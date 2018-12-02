@@ -1,5 +1,5 @@
-import { assert, expect } from 'chai';
-import { ContainerModule, interfaces, Container } from 'inversify';
+import { expect } from 'chai';
+import { Container } from 'inversify';
 import 'reflect-metadata';
 import { UserController } from './user.controller';
 import HTTP_INTERFACE_IDENTIFIERS from './../../identifiers';
@@ -8,7 +8,8 @@ import APP_IDENTIFIERS from '../../../../app/identifiers';
 import UserAppMock from '../../../../app/user/user.app.mock';
 import UserApp from '../../../../app/user/user.app';
 import { cleanUpMetadata } from 'inversify-express-utils';
-import { ApiResponse, responseList } from '../../constants/response';
+import { ApiResponse, responseList, ResponseCodes } from '../../constants/response';
+import httpResmock from './../../helpers/response_normalizer/http_res.mock';
 
 let userController: any;
 let resMock: any;
@@ -27,28 +28,13 @@ beforeEach(() => {
 });
 
 beforeEach(() => {
-    resMock = {
-        cb: null,
-        statusNumber: null,
-        registerCallback: function(cb: any) {
-            resMock.cb = cb;
-        },
-        status: function(status: number) {
-            resMock.statusNumber = status;
-            return resMock;
-        },
-        json: function(data: any) {
-            if (resMock.cb) {
-                resMock.cb(data, resMock.statusNumber);
-            }
-        }
-    };
+    resMock = httpResmock();
 });
 
 describe('userController', () => {
     describe('GET /users/:userId', () => {
         it('should return user that was found', async done => {
-            const expectedResponse: ApiResponse = responseList.get('user_found');
+            const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_FOUND);
             resMock.registerCallback((apiResponse: any, statusNumber: number) => {
                 expect(statusNumber).equal(expectedResponse.status);
                 expect(apiResponse.status).equal(expectedResponse.status);
@@ -58,6 +44,89 @@ describe('userController', () => {
                 done();
             });
             userController.getUser(1, resMock);
+        });
+    });
+    describe('GET /users/', () => {
+        it('should return users that was found', async done => {
+            const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USERS_FOUND);
+            resMock.registerCallback((apiResponse: any, statusNumber: number) => {
+                expect(statusNumber).equal(expectedResponse.status);
+                expect(apiResponse.status).equal(expectedResponse.status);
+                expect(apiResponse.code).equal(expectedResponse.code);
+                expect(apiResponse.message).equal(expectedResponse.message);
+                expect(apiResponse.data.length).equal(2);
+                expect(apiResponse.data[0].userId).equal(1);
+                expect(apiResponse.data[1].userId).equal(2);
+                done();
+            });
+            userController.getUsers(resMock);
+        });
+    });
+
+    describe('DELETE /users/:userId', () => {
+        it('should deleteUser', async done => {
+            const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_DELETED);
+            resMock.registerCallback((apiResponse: any, statusNumber: number) => {
+                expect(statusNumber).equal(expectedResponse.status);
+                expect(apiResponse.status).equal(expectedResponse.status);
+                expect(apiResponse.code).equal(expectedResponse.code);
+                expect(apiResponse.message).equal(expectedResponse.message);
+                expect(apiResponse.data).to.be.undefined;
+                done();
+            });
+            userController.deleteUser(1, resMock);
+        });
+    });
+    describe('POST /users', () => {
+        it('should createUser', async done => {
+            const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_CREATED);
+            resMock.registerCallback((apiResponse: any, statusNumber: number) => {
+                expect(statusNumber).equal(expectedResponse.status);
+                expect(apiResponse.status).equal(expectedResponse.status);
+                expect(apiResponse.code).equal(expectedResponse.code);
+                expect(apiResponse.message).equal(expectedResponse.message);
+                expect(apiResponse.data.email).equal('test@test.com');
+                expect(apiResponse.data.userId).equal(1);
+                done();
+            });
+            userController.createUser(
+                {
+                    body: {
+                        email: 'test@test.com',
+                        firstName: 'testFirstName',
+                        lastName: 'testLastName',
+                        age: 12
+                    }
+                },
+                resMock
+            );
+        });
+    });
+
+    describe('PUT /users/:userId', () => {
+        it('should updateUser', async done => {
+            const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_UPDATED);
+            resMock.registerCallback((apiResponse: any, statusNumber: number) => {
+                expect(statusNumber).equal(expectedResponse.status);
+                expect(apiResponse.status).equal(expectedResponse.status);
+                expect(apiResponse.code).equal(expectedResponse.code);
+                expect(apiResponse.message).equal(expectedResponse.message);
+                expect(apiResponse.data.email).equal('test@test.com');
+                expect(apiResponse.data.userId).equal(1);
+                done();
+            });
+            userController.updateUser(
+                1,
+                {
+                    body: {
+                        email: 'test@test.com',
+                        firstName: 'testFirstName',
+                        lastName: 'testLastName',
+                        age: 12
+                    }
+                },
+                resMock
+            );
         });
     });
 });

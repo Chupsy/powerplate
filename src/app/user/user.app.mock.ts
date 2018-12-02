@@ -11,4 +11,28 @@ export default class UserAppMock implements UserApp {
             userId: 1
         };
     }
+    public findAllUsers(): object {
+        return [
+            {
+                userId: 1
+            },
+            {
+                userId: 2
+            }
+        ];
+    }
+    public deleteUserById(): void {
+        return;
+    }
+
+    public createUser(userToCreate: { email: string; firstName: string; lastName: string; age: number }): object {
+        return { userId: 1, ...userToCreate };
+    }
+
+    public updateUser(
+        userId: number,
+        dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
+    ): object {
+        return { userId, ...dataToUpdate };
+    }
 }

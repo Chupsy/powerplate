@@ -1,6 +1,18 @@
+export enum ResponseCodes {
+    USER_FOUND = 'user_found',
+    USERS_FOUND = 'users_found',
+    USER_UPDATED = 'user_updated',
+    USER_DELETED = 'user_deleted',
+    USER_CREATED = 'user_created',
+    DATA_NOT_FOUND = 'data_not_found',
+    EMAIL_ALREADY_USED = 'email_already_used',
+    INVALID_PARAMETERS = 'invalid_parameters',
+    INTERNAL_SERVER_ERROR = 'internal_server_error'
+}
+
 export const responseList = new Map<string, ApiResponse>([
     [
-        'user_found',
+        ResponseCodes.USER_FOUND,
         {
             code: 'user_found',
             status: 200,
@@ -8,7 +20,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'users_found',
+        ResponseCodes.USERS_FOUND,
         {
             code: 'users_found',
             status: 200,
@@ -16,7 +28,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'user_updated',
+        ResponseCodes.USER_UPDATED,
         {
             code: 'user_updated',
             status: 200,
@@ -24,7 +36,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'user_deleted',
+        ResponseCodes.USER_DELETED,
         {
             code: 'user_deleted',
             status: 200,
@@ -32,7 +44,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'user_created',
+        ResponseCodes.USER_CREATED,
         {
             code: 'user_created',
             status: 201,
@@ -40,7 +52,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'data_not_found',
+        ResponseCodes.DATA_NOT_FOUND,
         {
             code: 'data_not_found',
             status: 404,
@@ -48,7 +60,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'email_already_used',
+        ResponseCodes.EMAIL_ALREADY_USED,
         {
             code: 'email_already_used',
             status: 400,
@@ -56,7 +68,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'invalid_parameters',
+        ResponseCodes.INVALID_PARAMETERS,
         {
             code: 'invalid_parameters',
             status: 400,
@@ -64,7 +76,7 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ],
     [
-        'internal_server_error',
+        ResponseCodes.INTERNAL_SERVER_ERROR,
         {
             code: 'internal_server_error',
             status: 500,

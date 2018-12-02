@@ -1,34 +1,18 @@
 import errorExposer from './index';
 import { assert, expect } from 'chai';
 import 'mocha';
-import { ApiResponse, responseList } from '../../constants/response';
-import responseNormalizer from '../../helpers/response_normalizer';
+import { ApiResponse, responseList, ResponseCodes } from '../../constants/response';
 import momus from './index';
-import { Joi } from 'celebrate';
 import { object, number, validate } from 'joi';
+import httpResmock from './../../helpers/response_normalizer/http_res.mock';
 
 let resMock: any;
 beforeEach(() => {
-    resMock = {
-        cb: null,
-        statusNumber: null,
-        registerCallback: function(cb: any) {
-            resMock.cb = cb;
-        },
-        status: function(status: number) {
-            resMock.statusNumber = status;
-            return resMock;
-        },
-        json: function(data: any) {
-            if (resMock.cb) {
-                resMock.cb(data, resMock.statusNumber);
-            }
-        }
-    };
+    resMock = httpResmock();
 });
 describe('momus', () => {
     it('should call response normalizer with error message', done => {
-        const expectedResponse: ApiResponse = responseList.get('data_not_found');
+        const expectedResponse: ApiResponse = responseList.get(ResponseCodes.DATA_NOT_FOUND);
         resMock.registerCallback((response: any, statusNumber: number) => {
             expect(statusNumber).equal(expectedResponse.status);
             expect(response.status).equal(expectedResponse.status);
@@ -40,7 +24,7 @@ describe('momus', () => {
         momus(new Error('data_not_found'), null, resMock, null);
     });
     it('should call response normalizer with joi errors if its a joi error', done => {
-        const expectedResponse: ApiResponse = responseList.get('invalid_parameters');
+        const expectedResponse: ApiResponse = responseList.get(ResponseCodes.INVALID_PARAMETERS);
         resMock.registerCallback((response: any, statusNumber: number) => {
             expect(statusNumber).equal(expectedResponse.status);
             expect(response.status).equal(expectedResponse.status);
@@ -62,7 +46,7 @@ describe('momus', () => {
         momus(result.error, null, resMock, null);
     });
     it('should call bypass if its not a joi error', done => {
-        const expectedResponse: ApiResponse = responseList.get('internal_server_error');
+        const expectedResponse: ApiResponse = responseList.get(ResponseCodes.INTERNAL_SERVER_ERROR);
         resMock.registerCallback((response: any, statusNumber: number) => {
             expect(statusNumber).equal(expectedResponse.status);
             expect(response.status).equal(expectedResponse.status);
