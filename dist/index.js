@@ -8,3 +8,4 @@ var loaderContainer = new inversify_1.Container();
 loaderContainer.load(app_1.appModule);
 loaderContainer.load(http_1.httpInterfaceModule);
 http_1.init(loaderContainer);
+http_1.start();

@@ -20,13 +20,269 @@ var express = require("express");
 var read_schema_1 = require("./schemas/read.schema");
 var response_normalizer_1 = require("../../helpers/response_normalizer");
 var user_app_1 = require("../../../../app/user/user.app");
+var response_1 = require("../../constants/response");
+var create_schema_1 = require("./schemas/create.schema");
+var update_schema_1 = require("./schemas/update.schema");
+var delete_schema_1 = require("./schemas/delete.schema");
 var UserController = /** @class */ (function () {
     function UserController(userApp) {
         this.userApp = userApp;
     }
+    /**
+     * @api {get} /user/:userId Find user by id
+     * @apiName GetUser
+     * @apiGroup User
+     *
+     * @apiParam {Number} userId User id.
+     *
+     * @apiSuccess {String} code            request status code.
+     * @apiSuccess {Number} status          request status.
+     * @apiSuccess {String} message         request message.
+     * @apiSuccess {Object} data            request data.
+     * @apiSuccess {Number} data.userId     User unique Id.
+     * @apiSuccess {String} data.firstName  User first name.
+     * @apiSuccess {String} data.lastName   User last name.
+     * @apiSuccess {Number} data.age        User age.
+     * @apiSuccess {String} data.email      User email.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *       "code": "user_found",
+     *       "status": 200,
+     *       "message": "You have access to this user.",
+     *       "data": {
+     *           "userId": 1,
+     *           "firstName": "John",
+     *           "lastName": "Doe",
+     *           "age": 20,
+     *           "email": "john@doe.com",
+     *       }
+     *   }
+     *
+     * @apiError data_not_found Data was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "data_not_found",
+     *       "status": 404,
+     *       "message": "Data was not found."
+     *   }
+     *
+     * @apiError invalid_parameters Invalid parameters.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_parameters",
+     *       "status": 400,
+     *       "message": "\"userId\" must be a number"
+     *   }
+     */
     UserController.prototype.getUser = function (id, res) {
         var user = this.userApp.findUserById(id);
-        response_normalizer_1.default(res, 'user_found', user);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_FOUND, user);
+    };
+    /**
+     * @api {get} /user Find all users
+     * @apiName GetUsers
+     * @apiGroup User
+     *
+     * @apiSuccess {String} code            request status code.
+     * @apiSuccess {Number} status          request status.
+     * @apiSuccess {String} message         request message.
+     * @apiSuccess {Object[]} data            request data.
+     * @apiSuccess {Number} data.userId     User unique Id.
+     * @apiSuccess {String} data.firstName  User first name.
+     * @apiSuccess {String} data.lastName   User last name.
+     * @apiSuccess {Number} data.age        User age.
+     * @apiSuccess {String} data.email      User email.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *       "code": "users_found",
+     *       "status": 200,
+     *       "message": "You have access to these users.",
+     *       "data": [{
+     *           "userId": 1,
+     *           "firstName": "John",
+     *           "lastName": "Doe",
+     *           "age": 20,
+     *           "email": "john@doe.com",
+     *       }]
+     *   }
+     *
+     */
+    UserController.prototype.getUsers = function (res) {
+        var users = this.userApp.findAllUsers();
+        response_normalizer_1.default(res, response_1.ResponseCodes.USERS_FOUND, users);
+    };
+    /**
+     * @api {delete} /user/:userId Delete user by id
+     * @apiName DeleteUser
+     * @apiGroup User
+     *
+     * @apiParam {Number} userId Userid.
+     *
+     * @apiSuccess {String} code            request status code.
+     * @apiSuccess {Number} status          request status.
+     * @apiSuccess {String} message         request message.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *       "code": "user_deleted",
+     *       "status": 200,
+     *       "message": "User was successfully deleted."
+     *   }
+     *
+     * @apiError data_not_found Data was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "data_not_found",
+     *       "status": 404,
+     *       "message": "Data was not found."
+     *   }
+     *
+     *
+     * @apiError invalid_parameters Invalid parameters.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_parameters",
+     *       "status": 400,
+     *       "message": "\"userId\" must be a number"
+     *   }
+     */
+    UserController.prototype.deleteUser = function (id, res) {
+        this.userApp.deleteUserById(id);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_DELETED);
+    };
+    /**
+     * @api {post} /user Create user
+     * @apiName CreateUser
+     * @apiGroup User
+     *
+     * @apiParam {String} email     User email.
+     * @apiParam {String} firstName User firstName.
+     * @apiParam {String} lastName  User lastName.
+     * @apiParam {Number} age       User age.
+     *
+     * @apiSuccess {String} code            request status code.
+     * @apiSuccess {Number} status          request status.
+     * @apiSuccess {String} message         request message.
+     * @apiSuccess {Object} data            request data.
+     * @apiSuccess {Number} data.userId     User unique Id.
+     * @apiSuccess {String} data.firstName  User first name.
+     * @apiSuccess {String} data.lastName   User last name.
+     * @apiSuccess {Number} data.age        User age.
+     * @apiSuccess {String} data.email      User email.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *       "code": "user_created",
+     *       "status": 201,
+     *       "message": "User was successfully created.",
+     *       "data": {
+     *           "userId": 1,
+     *           "firstName": "John",
+     *           "lastName": "Doe",
+     *           "age": 20,
+     *           "email": "john@doe.com",
+     *       }
+     *   }
+     *
+     *
+     * @apiError invalid_parameters Invalid parameters.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_parameters",
+     *       "status": 400,
+     *       "message": "\"userId\" must be a number"
+     *   }
+     *
+     * @apiError email_already_used Email already used.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "email_already_used",
+     *       "status": 400,
+     *       "message": "Email already in use."
+     *   }
+     */
+    UserController.prototype.createUser = function (req, res) {
+        var user = this.userApp.createUser(req.body);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_CREATED, user);
+    };
+    /**
+     * @api {put} /user/:userId Update user
+     * @apiName UpdateUser
+     * @apiGroup User
+     *
+     * @apiParam {number} userId    User Id.
+     * @apiParam {String} [email]     User email.
+     * @apiParam {String} [firstName] User firstName.
+     * @apiParam {String} [lastName]  User lastName.
+     * @apiParam {Number} [age]       User age.
+     *
+     * @apiSuccess {String} code            request status code.
+     * @apiSuccess {Number} status          request status.
+     * @apiSuccess {String} message         request message.
+     * @apiSuccess {Object} data            request data.
+     * @apiSuccess {Number} data.userId     User unique Id.
+     * @apiSuccess {String} data.firstName  User first name.
+     * @apiSuccess {String} data.lastName   User last name.
+     * @apiSuccess {Number} data.age        User age.
+     * @apiSuccess {String} data.email      User email.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *   {
+     *       "code": "user_updated",
+     *       "status": 200,
+     *       "message": "User was successfully updated.",
+     *       "data": {
+     *           "userId": 1,
+     *           "firstName": "John",
+     *           "lastName": "Doe",
+     *           "age": 20,
+     *           "email": "john@doe.com",
+     *       }
+     *   }
+     *
+     * @apiError data_not_found Data was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "data_not_found",
+     *       "status": 404,
+     *       "message": "Data was not found."
+     *   }
+     *
+     * @apiError invalid_parameters Invalid parameters.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_parameters",
+     *       "status": 400
+     *       "message": "\"userId\" must be a number"
+     *   }
+     *
+     * @apiError email_already_used Email already used.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "email_already_used",
+     *       "status": 400,
+     *       "message": "Email already in use."
+     *   }
+     */
+    UserController.prototype.updateUser = function (id, req, res) {
+        var user = this.userApp.updateUser(id, req.body);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_UPDATED, user);
     };
     __decorate([
         inversify_express_utils_1.httpGet('/:userId', celebrate_1.celebrate(read_schema_1.userFindOneSchema)),
@@ -35,6 +291,36 @@ var UserController = /** @class */ (function () {
         __metadata("design:paramtypes", [Number, Object]),
         __metadata("design:returntype", void 0)
     ], UserController.prototype, "getUser", null);
+    __decorate([
+        inversify_express_utils_1.httpGet('/'),
+        __param(0, inversify_express_utils_1.response()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], UserController.prototype, "getUsers", null);
+    __decorate([
+        inversify_express_utils_1.httpDelete('/:userId', celebrate_1.celebrate(delete_schema_1.userDeleteSchema)),
+        __param(0, inversify_express_utils_1.requestParam('userId')), __param(1, inversify_express_utils_1.response()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number, Object]),
+        __metadata("design:returntype", void 0)
+    ], UserController.prototype, "deleteUser", null);
+    __decorate([
+        inversify_express_utils_1.httpPost('/', celebrate_1.celebrate(create_schema_1.userCreateSchema)),
+        __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], UserController.prototype, "createUser", null);
+    __decorate([
+        inversify_express_utils_1.httpPut('/:userId', celebrate_1.celebrate(update_schema_1.userUpdateSchema)),
+        __param(0, inversify_express_utils_1.requestParam('userId')),
+        __param(1, inversify_express_utils_1.request()),
+        __param(2, inversify_express_utils_1.response()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number, Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], UserController.prototype, "updateUser", null);
     UserController = __decorate([
         inversify_express_utils_1.controller('/users'),
         __param(0, inversify_1.inject(identifiers_1.default.UserApp)),

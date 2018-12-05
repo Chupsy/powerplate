@@ -4,6 +4,9 @@ import bodyParser = require('body-parser');
 import { UserController } from './components/user/user.controller';
 import HTTP_INTERFACE_IDENTIFIERS from './identifiers';
 import momus from './middlewares/momus';
+import { Application } from 'express-serve-static-core';
+
+export let serverInstance: Application;
 
 export const httpInterfaceModule = new ContainerModule((bind: interfaces.Bind) => {
     bind<UserController>(HTTP_INTERFACE_IDENTIFIERS.UserController)
@@ -26,8 +29,10 @@ export function init(container: Container) {
     server.setErrorConfig(app => {
         app.use(momus);
     });
-
-    let serverInstance = server.build();
-    serverInstance.listen(3000);
+    serverInstance = server.build();
     console.log('Server is ready');
+}
+export function start() {
+    console.log('Server is listening');
+    return serverInstance.listen(3000);
 }

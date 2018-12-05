@@ -7,6 +7,9 @@ describe('userUpdateSchema', () => {
     it('should accept valid user', () => {
         const result = validate(
             {
+                params: {
+                    userId: 1
+                },
                 body: {
                     firstName: 'John',
                     lastName: 'Doe'
@@ -20,6 +23,9 @@ describe('userUpdateSchema', () => {
     it('should refuse invalid email', () => {
         const result = validate(
             {
+                params: {
+                    userId: 1
+                },
                 body: {
                     firstName: 'John',
                     lastName: 'Doe',
@@ -37,6 +43,9 @@ describe('userUpdateSchema', () => {
     it('should refuse invalid age', () => {
         const result = validate(
             {
+                params: {
+                    userId: 1
+                },
                 body: {
                     firstName: 'John',
                     lastName: 'Doe',
@@ -54,6 +63,9 @@ describe('userUpdateSchema', () => {
     it('should refuse missing parameters', () => {
         const result = validate(
             {
+                params: {
+                    userId: 1
+                },
                 body: {}
             },
             userUpdateSchema
@@ -61,5 +73,19 @@ describe('userUpdateSchema', () => {
         expect(result.error).to.be.an('error');
         expect(result.error.details.length).to.equal(1);
         expect(result.error.details[0].type).to.equal('object.missing');
+    });
+    it('should refuse missing userId', () => {
+        const result = validate(
+            {
+                params: {},
+                body: {
+                    email: 'test@test.test'
+                }
+            },
+            userUpdateSchema
+        );
+        expect(result.error).to.be.an('error');
+        expect(result.error.details.length).to.equal(1);
+        expect(result.error.details[0].type).to.equal('any.required');
     });
 });

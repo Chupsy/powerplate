@@ -19,6 +19,7 @@ import UserApp from '../../../../app/user/user.app';
 import { ResponseCodes } from '../../constants/response';
 import { userCreateSchema } from './schemas/create.schema';
 import { userUpdateSchema } from './schemas/update.schema';
+import { userDeleteSchema } from './schemas/delete.schema';
 
 @controller('/users')
 export class UserController implements interfaces.Controller {
@@ -155,7 +156,7 @@ export class UserController implements interfaces.Controller {
      *       "message": "\"userId\" must be a number"
      *   }
      */
-    @httpDelete('/:userId')
+    @httpDelete('/:userId', celebrate(userDeleteSchema))
     public deleteUser(@requestParam('userId') id: number, @response() res: express.Response): void {
         this.userApp.deleteUserById(id);
         responseNormalizer(res, ResponseCodes.USER_DELETED);

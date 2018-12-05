@@ -13,6 +13,18 @@ var UserApp = /** @class */ (function () {
     UserApp.prototype.findUserById = function (userId) {
         return {};
     };
+    UserApp.prototype.findAllUsers = function () {
+        return {};
+    };
+    UserApp.prototype.deleteUserById = function (userId) {
+        return;
+    };
+    UserApp.prototype.createUser = function (userToCreate) {
+        return userToCreate;
+    };
+    UserApp.prototype.updateUser = function (userId, dataToUpdate) {
+        return dataToUpdate;
+    };
     UserApp = __decorate([
         inversify_1.injectable()
     ], UserApp);

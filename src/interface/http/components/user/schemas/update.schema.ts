@@ -1,6 +1,11 @@
 import { object, number, string } from 'joi';
 
 export const userUpdateSchema = {
+    params: object()
+        .keys({
+            userId: number().required()
+        })
+        .required(),
     body: object()
         .keys({
             email: string()

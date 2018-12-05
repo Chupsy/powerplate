@@ -23,8 +23,12 @@ function init(container) {
     server.setErrorConfig(function (app) {
         app.use(momus_1.default);
     });
-    var serverInstance = server.build();
-    serverInstance.listen(3000);
+    exports.serverInstance = server.build();
     console.log('Server is ready');
 }
 exports.init = init;
+function start() {
+    console.log('Server is listening');
+    return exports.serverInstance.listen(3000);
+}
+exports.start = start;

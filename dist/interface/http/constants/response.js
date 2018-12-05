@@ -1,8 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var ResponseCodes;
+(function (ResponseCodes) {
+    ResponseCodes["USER_FOUND"] = "user_found";
+    ResponseCodes["USERS_FOUND"] = "users_found";
+    ResponseCodes["USER_UPDATED"] = "user_updated";
+    ResponseCodes["USER_DELETED"] = "user_deleted";
+    ResponseCodes["USER_CREATED"] = "user_created";
+    ResponseCodes["DATA_NOT_FOUND"] = "data_not_found";
+    ResponseCodes["EMAIL_ALREADY_USED"] = "email_already_used";
+    ResponseCodes["INVALID_PARAMETERS"] = "invalid_parameters";
+    ResponseCodes["INTERNAL_SERVER_ERROR"] = "internal_server_error";
+})(ResponseCodes = exports.ResponseCodes || (exports.ResponseCodes = {}));
 exports.responseList = new Map([
     [
-        'user_found',
+        ResponseCodes.USER_FOUND,
         {
             code: 'user_found',
             status: 200,
@@ -10,7 +22,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'users_found',
+        ResponseCodes.USERS_FOUND,
         {
             code: 'users_found',
             status: 200,
@@ -18,7 +30,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'user_updated',
+        ResponseCodes.USER_UPDATED,
         {
             code: 'user_updated',
             status: 200,
@@ -26,7 +38,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'user_deleted',
+        ResponseCodes.USER_DELETED,
         {
             code: 'user_deleted',
             status: 200,
@@ -34,7 +46,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'user_created',
+        ResponseCodes.USER_CREATED,
         {
             code: 'user_created',
             status: 201,
@@ -42,7 +54,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'data_not_found',
+        ResponseCodes.DATA_NOT_FOUND,
         {
             code: 'data_not_found',
             status: 404,
@@ -50,7 +62,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'email_already_used',
+        ResponseCodes.EMAIL_ALREADY_USED,
         {
             code: 'email_already_used',
             status: 400,
@@ -58,7 +70,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'invalid_parameters',
+        ResponseCodes.INVALID_PARAMETERS,
         {
             code: 'invalid_parameters',
             status: 400,
@@ -66,7 +78,7 @@ exports.responseList = new Map([
         }
     ],
     [
-        'internal_server_error',
+        ResponseCodes.INTERNAL_SERVER_ERROR,
         {
             code: 'internal_server_error',
             status: 500,

@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var joi_1 = require("joi");
 exports.userUpdateSchema = {
+    params: joi_1.object()
+        .keys({
+        userId: joi_1.number().required()
+    })
+        .required(),
     body: joi_1.object()
         .keys({
         email: joi_1.string()
