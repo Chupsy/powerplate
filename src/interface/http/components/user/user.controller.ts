@@ -43,7 +43,7 @@ export class UserController implements interfaces.Controller {
      * @apiSuccess {String} data.email      User email.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
+     *     HTTP/2 200 OK
      *   {
      *       "code": "user_found",
      *       "status": 200,
@@ -97,7 +97,7 @@ export class UserController implements interfaces.Controller {
      * @apiSuccess {String} data.email      User email.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
+     *     HTTP/2 200 OK
      *   {
      *       "code": "users_found",
      *       "status": 200,
@@ -130,7 +130,7 @@ export class UserController implements interfaces.Controller {
      * @apiSuccess {String} message         request message.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
+     *     HTTP/2 200 OK
      *   {
      *       "code": "user_deleted",
      *       "status": 200,
@@ -183,7 +183,7 @@ export class UserController implements interfaces.Controller {
      * @apiSuccess {String} data.email      User email.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
+     *     HTTP/2 200 OK
      *   {
      *       "code": "user_created",
      *       "status": 201,
@@ -244,7 +244,7 @@ export class UserController implements interfaces.Controller {
      * @apiSuccess {String} data.email      User email.
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
+     *     HTTP/2 200 OK
      *   {
      *       "code": "user_updated",
      *       "status": 200,
