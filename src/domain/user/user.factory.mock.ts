@@ -1,9 +1,8 @@
 import { injectable, inject } from 'inversify';
-import UserApp from './user.app';
-import UserFactory from '../../domain/user/user.factory';
+import UserFactory from './user.factory';
 
 @injectable()
-export default class UserAppMock extends UserApp {
+export default class UserFactoryMock extends UserFactory {
 
     public findUserById(userId: number): object {
         if (userId !== 1) {
