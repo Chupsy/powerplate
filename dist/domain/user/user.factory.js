@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -48,67 +59,120 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_1 = require("inversify");
-var user_factory_1 = require("./../../domain/user/user.factory");
-var identifiers_1 = require("../../domain/identifiers");
-var UserApp = /** @class */ (function () {
-    function UserApp(userFactory) {
-        this.userFactory = userFactory;
+var identifiers_1 = require("../../infra/mongodb/identifiers");
+var user_infra_1 = require("../../infra/mongodb/user/user.infra");
+var UserFactory = /** @class */ (function () {
+    function UserFactory(userInfra) {
+        this.userInfra = userInfra;
     }
-    UserApp.prototype.findUserById = function (userId) {
+    UserFactory.prototype.findUserById = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var foundUser;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userInfra.findUserById(userId)];
+                    case 1:
+                        foundUser = _a.sent();
+                        if (!foundUser) {
+                            throw new Error('data_not_found');
+                        }
+                        return [2 /*return*/, foundUser];
+                }
+            });
+        });
+    };
+    UserFactory.prototype.findAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userFactory.findUserById(userId)];
+                    case 0: return [4 /*yield*/, this.userInfra.findAllUsers()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    UserApp.prototype.findAllUsers = function () {
+    UserFactory.prototype.deleteUserById = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
+            var foundUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userFactory.findAllUsers()];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, this.userInfra.findUserById(userId)];
+                    case 1:
+                        foundUser = _a.sent();
+                        if (!foundUser) {
+                            throw new Error('data_not_found');
+                        }
+                        return [4 /*yield*/, this.userInfra.deleteUserById(userId)];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    UserApp.prototype.deleteUserById = function (userId) {
+    UserFactory.prototype.createUser = function (userToCreate) {
         return __awaiter(this, void 0, void 0, function () {
+            var createdUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userFactory.deleteUserById(userId)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, this.verifyEmail(userToCreate.email)];
+                    case 1:
+                        _a.sent();
+                        if (userToCreate.age <= 0) {
+                            throw new Error('invalid_age');
+                        }
+                        return [4 /*yield*/, this.userInfra.createUser(__assign({}, userToCreate))];
+                    case 2:
+                        createdUser = _a.sent();
+                        return [2 /*return*/, createdUser];
                 }
             });
         });
     };
-    UserApp.prototype.createUser = function (userToCreate) {
+    UserFactory.prototype.updateUser = function (userId, dataToUpdate) {
         return __awaiter(this, void 0, void 0, function () {
+            var foundUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userFactory.createUser(userToCreate)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, this.userInfra.findUserById(userId)];
+                    case 1:
+                        foundUser = _a.sent();
+                        if (!foundUser) {
+                            throw new Error('data_not_found');
+                        }
+                        if (dataToUpdate.age <= 0) {
+                            throw new Error('invalid_age');
+                        }
+                        if (!dataToUpdate.email) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.verifyEmail(dataToUpdate.email, userId)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [4 /*yield*/, this.userInfra.updateUser(userId, dataToUpdate)];
+                    case 4: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    UserApp.prototype.updateUser = function (userId, dataToUpdate) {
+    UserFactory.prototype.verifyEmail = function (email, userId) {
         return __awaiter(this, void 0, void 0, function () {
+            var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userFactory.updateUser(userId, dataToUpdate)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, this.userInfra.findUserByEmail(email)];
+                    case 1:
+                        user = _a.sent();
+                        if (user && (!userId || userId !== user.userId)) {
+                            throw new Error('email_already_used');
+                        }
+                        return [2 /*return*/];
                 }
             });
         });
     };
-    UserApp = __decorate([
+    UserFactory = __decorate([
         inversify_1.injectable(),
-        __param(0, inversify_1.inject(identifiers_1.default.UserFactory)),
-        __metadata("design:paramtypes", [user_factory_1.default])
-    ], UserApp);
-    return UserApp;
+        __param(0, inversify_1.inject(identifiers_1.default.UserInfra)),
+        __metadata("design:paramtypes", [user_infra_1.UserInfra])
+    ], UserFactory);
+    return UserFactory;
 }());
-exports.default = UserApp;
+exports.default = UserFactory;

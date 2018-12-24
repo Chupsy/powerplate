@@ -34,28 +34,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
 var inversify_1 = require("inversify");
-var http_1 = require("./interface/http");
-var app_1 = require("./app");
-var domain_1 = require("./domain");
-var mongodb_1 = require("./infra/mongodb");
-var loaderContainer = new inversify_1.Container();
-loaderContainer.load(mongodb_1.mongodbInfraModule);
-loaderContainer.load(domain_1.domainModule);
-loaderContainer.load(app_1.appModule);
-loaderContainer.load(http_1.httpInterfaceModule);
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, mongodb_1.start()];
-            case 1:
-                _a.sent();
-                http_1.init(loaderContainer);
-                http_1.start();
-                return [2 /*return*/];
-        }
+require("reflect-metadata");
+var identifiers_1 = require("./identifiers");
+var user_infra_1 = require("./user/user.infra");
+var uri = 'mongodb://127.0.0.1:27017/local';
+var mongoose = require("mongoose");
+exports.mongodbInfraModule = new inversify_1.ContainerModule(function (bind) {
+    bind(identifiers_1.default.UserInfra)
+        .to(user_infra_1.UserInfra)
+        .inSingletonScope();
+});
+function start() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, mongoose.connect(uri, { useNewUrlParser: true })];
+                case 1:
+                    _a.sent();
+                    console.log('database ready');
+                    return [2 /*return*/];
+            }
+        });
     });
-}); })();
+}
+exports.start = start;

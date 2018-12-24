@@ -3,9 +3,8 @@ import UserApp from './user.app';
 import UserFactory from '../../domain/user/user.factory';
 
 @injectable()
-export default class UserAppMock extends UserApp {
-
-    public findUserById(userId: number): object {
+export default class UserAppMock implements UserApp {
+    public async findUserById(userId: number): Promise<object> {
         if (userId !== 1) {
             throw new Error('data_not_found');
         }
@@ -13,7 +12,7 @@ export default class UserAppMock extends UserApp {
             userId: 1
         };
     }
-    public findAllUsers(): object {
+    public async findAllUsers(): Promise<any[]> {
         return [
             {
                 userId: 1
@@ -23,18 +22,23 @@ export default class UserAppMock extends UserApp {
             }
         ];
     }
-    public deleteUserById(): void {
+    public async deleteUserById(): Promise<void> {
         return;
     }
 
-    public createUser(userToCreate: { email: string; firstName: string; lastName: string; age: number }): object {
+    public async createUser(userToCreate: {
+        email: string;
+        firstName: string;
+        lastName: string;
+        age: number;
+    }): Promise<object> {
         return { userId: 1, ...userToCreate };
     }
 
-    public updateUser(
+    public async updateUser(
         userId: number,
         dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
-    ): object {
+    ): Promise<object> {
         return { userId, ...dataToUpdate };
     }
 }

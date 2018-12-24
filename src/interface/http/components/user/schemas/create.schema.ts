@@ -12,7 +12,7 @@ export const userCreateSchema = {
             .min(2)
             .required(),
         age: number()
-            .min(0)
+            .min(1)
             .precision(0)
             .required()
     })

@@ -7,7 +7,8 @@ export enum ResponseCodes {
     DATA_NOT_FOUND = 'data_not_found',
     EMAIL_ALREADY_USED = 'email_already_used',
     INVALID_PARAMETERS = 'invalid_parameters',
-    INTERNAL_SERVER_ERROR = 'internal_server_error'
+    INTERNAL_SERVER_ERROR = 'internal_server_error',
+    INVALID_AGE = 'invalid_age'
 }
 
 export const responseList = new Map<string, ApiResponse>([
@@ -73,6 +74,14 @@ export const responseList = new Map<string, ApiResponse>([
             code: 'invalid_parameters',
             status: 400,
             message: 'Missing/invalid parameters.'
+        }
+    ],
+    [
+        ResponseCodes.INVALID_AGE,
+        {
+            code: 'invalid_age',
+            status: 400,
+            message: 'Age must be over 0.'
         }
     ],
     [

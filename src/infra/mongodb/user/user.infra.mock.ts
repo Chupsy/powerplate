@@ -1,17 +1,18 @@
 import { injectable, inject } from 'inversify';
-import UserFactory from './user.factory';
+import { UserInfra } from './user.infra';
 
 @injectable()
-export default class UserFactoryMock implements UserFactory {
-    public async findUserById(userId: number): Promise<object> {
+export default class UserInfraMock implements UserInfra {
+    public User: any;
+    public async findUserById(userId: number): Promise<any> {
         if (userId !== 1) {
-            throw new Error('data_not_found');
+            return null;
         }
         return {
             userId: 1
         };
     }
-    public async findAllUsers(): Promise<object[]> {
+    public async findAllUsers(): Promise<any[]> {
         return [
             {
                 userId: 1
@@ -30,17 +31,20 @@ export default class UserFactoryMock implements UserFactory {
         firstName: string;
         lastName: string;
         age: number;
-    }): Promise<object> {
+    }): Promise<any> {
         return { userId: 1, ...userToCreate };
     }
 
     public async updateUser(
         userId: number,
         dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
-    ): Promise<object> {
+    ): Promise<any> {
         return { userId, ...dataToUpdate };
     }
-    public async verifyEmail(): Promise<void> {
+    public async findUserByEmail(email: string): Promise<any> {
+        if (email === 'email@already.used') {
+            return {};
+        }
         return null;
     }
 }

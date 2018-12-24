@@ -33,7 +33,7 @@ beforeEach(() => {
 
 describe('userController', () => {
     describe('GET /users/:userId', () => {
-        it('should return user that was found', async done => {
+        it('should return user that was found', async () => {
             const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_FOUND);
             resMock.registerCallback((apiResponse: any, statusNumber: number) => {
                 expect(statusNumber).equal(expectedResponse.status);
@@ -41,13 +41,12 @@ describe('userController', () => {
                 expect(apiResponse.code).equal(expectedResponse.code);
                 expect(apiResponse.message).equal(expectedResponse.message);
                 expect(apiResponse.data.userId).equal(1);
-                done();
             });
-            userController.getUser(1, resMock);
+            await userController.getUser(1, resMock);
         });
     });
     describe('GET /users/', () => {
-        it('should return users that was found', async done => {
+        it('should return users that was found', async () => {
             const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USERS_FOUND);
             resMock.registerCallback((apiResponse: any, statusNumber: number) => {
                 expect(statusNumber).equal(expectedResponse.status);
@@ -57,14 +56,13 @@ describe('userController', () => {
                 expect(apiResponse.data.length).equal(2);
                 expect(apiResponse.data[0].userId).equal(1);
                 expect(apiResponse.data[1].userId).equal(2);
-                done();
             });
-            userController.getUsers(resMock);
+            await userController.getUsers(resMock);
         });
     });
 
     describe('DELETE /users/:userId', () => {
-        it('should deleteUser', async done => {
+        it('should deleteUser', async () => {
             const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_DELETED);
             resMock.registerCallback((apiResponse: any, statusNumber: number) => {
                 expect(statusNumber).equal(expectedResponse.status);
@@ -72,13 +70,12 @@ describe('userController', () => {
                 expect(apiResponse.code).equal(expectedResponse.code);
                 expect(apiResponse.message).equal(expectedResponse.message);
                 expect(apiResponse.data).to.be.undefined;
-                done();
             });
-            userController.deleteUser(1, resMock);
+            await userController.deleteUser(1, resMock);
         });
     });
     describe('POST /users', () => {
-        it('should createUser', async done => {
+        it('should createUser', async () => {
             const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_CREATED);
             resMock.registerCallback((apiResponse: any, statusNumber: number) => {
                 expect(statusNumber).equal(expectedResponse.status);
@@ -87,9 +84,8 @@ describe('userController', () => {
                 expect(apiResponse.message).equal(expectedResponse.message);
                 expect(apiResponse.data.email).equal('test@test.com');
                 expect(apiResponse.data.userId).equal(1);
-                done();
             });
-            userController.createUser(
+            await userController.createUser(
                 {
                     body: {
                         email: 'test@test.com',
@@ -104,7 +100,7 @@ describe('userController', () => {
     });
 
     describe('PUT /users/:userId', () => {
-        it('should updateUser', async done => {
+        it('should updateUser', async () => {
             const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_UPDATED);
             resMock.registerCallback((apiResponse: any, statusNumber: number) => {
                 expect(statusNumber).equal(expectedResponse.status);
@@ -113,9 +109,8 @@ describe('userController', () => {
                 expect(apiResponse.message).equal(expectedResponse.message);
                 expect(apiResponse.data.email).equal('test@test.com');
                 expect(apiResponse.data.userId).equal(1);
-                done();
             });
-            userController.updateUser(
+            await userController.updateUser(
                 1,
                 {
                     body: {

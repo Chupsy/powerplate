@@ -53,14 +53,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_1 = require("inversify");
-var UserAppMock = /** @class */ (function () {
-    function UserAppMock() {
+var UserInfraMock = /** @class */ (function () {
+    function UserInfraMock() {
     }
-    UserAppMock.prototype.findUserById = function (userId) {
+    UserInfraMock.prototype.findUserById = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (userId !== 1) {
-                    throw new Error('data_not_found');
+                    return [2 /*return*/, null];
                 }
                 return [2 /*return*/, {
                         userId: 1
@@ -68,7 +68,7 @@ var UserAppMock = /** @class */ (function () {
             });
         });
     };
-    UserAppMock.prototype.findAllUsers = function () {
+    UserInfraMock.prototype.findAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, [
@@ -82,30 +82,40 @@ var UserAppMock = /** @class */ (function () {
             });
         });
     };
-    UserAppMock.prototype.deleteUserById = function () {
+    UserInfraMock.prototype.deleteUserById = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
             });
         });
     };
-    UserAppMock.prototype.createUser = function (userToCreate) {
+    UserInfraMock.prototype.createUser = function (userToCreate) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, __assign({ userId: 1 }, userToCreate)];
             });
         });
     };
-    UserAppMock.prototype.updateUser = function (userId, dataToUpdate) {
+    UserInfraMock.prototype.updateUser = function (userId, dataToUpdate) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, __assign({ userId: userId }, dataToUpdate)];
             });
         });
     };
-    UserAppMock = __decorate([
+    UserInfraMock.prototype.findUserByEmail = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (email === 'email@already.used') {
+                    return [2 /*return*/, {}];
+                }
+                return [2 /*return*/, null];
+            });
+        });
+    };
+    UserInfraMock = __decorate([
         inversify_1.injectable()
-    ], UserAppMock);
-    return UserAppMock;
+    ], UserInfraMock);
+    return UserInfraMock;
 }());
-exports.default = UserAppMock;
+exports.default = UserInfraMock;

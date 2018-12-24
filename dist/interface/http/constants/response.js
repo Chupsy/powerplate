@@ -11,6 +11,7 @@ var ResponseCodes;
     ResponseCodes["EMAIL_ALREADY_USED"] = "email_already_used";
     ResponseCodes["INVALID_PARAMETERS"] = "invalid_parameters";
     ResponseCodes["INTERNAL_SERVER_ERROR"] = "internal_server_error";
+    ResponseCodes["INVALID_AGE"] = "invalid_age";
 })(ResponseCodes = exports.ResponseCodes || (exports.ResponseCodes = {}));
 exports.responseList = new Map([
     [
@@ -75,6 +76,14 @@ exports.responseList = new Map([
             code: 'invalid_parameters',
             status: 400,
             message: 'Missing/invalid parameters.'
+        }
+    ],
+    [
+        ResponseCodes.INVALID_AGE,
+        {
+            code: 'invalid_age',
+            status: 400,
+            message: 'Age must be over 0.'
         }
     ],
     [

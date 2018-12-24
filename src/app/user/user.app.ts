@@ -3,32 +3,36 @@ import UserFactory from './../../domain/user/user.factory';
 import DOMAIN_IDENTIFIERS from '../../domain/identifiers';
 @injectable()
 export default class UserApp {
-
-    protected userFactory: UserFactory;
+    protected userFactory?: UserFactory;
 
     constructor(@inject(DOMAIN_IDENTIFIERS.UserFactory) userFactory: UserFactory) {
         this.userFactory = userFactory;
     }
 
-    public findUserById(userId: number): object {
-        return this.userFactory.findUserById(userId);
+    public async findUserById(userId: number): Promise<object> {
+        return await this.userFactory.findUserById(userId);
     }
 
-    public findAllUsers(): object {
-        return this.userFactory.findAllUsers();
+    public async findAllUsers(): Promise<object[]> {
+        return await this.userFactory.findAllUsers();
     }
 
-    public deleteUserById(userId: number): void {
-        return this.userFactory.deleteUserById(userId);
+    public async deleteUserById(userId: number): Promise<void> {
+        return await this.userFactory.deleteUserById(userId);
     }
 
-    public createUser(userToCreate: { email: string; firstName: string; lastName: string; age: number }): object {
-        return this.userFactory.createUser(userToCreate);
+    public async createUser(userToCreate: {
+        email: string;
+        firstName: string;
+        lastName: string;
+        age: number;
+    }): Promise<object> {
+        return await this.userFactory.createUser(userToCreate);
     }
-    public updateUser(
+    public async updateUser(
         userId: number,
         dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
-    ): object {
-        return this.userFactory.updateUser(userId, dataToUpdate);
+    ): Promise<object> {
+        return await this.userFactory.updateUser(userId, dataToUpdate);
     }
 }

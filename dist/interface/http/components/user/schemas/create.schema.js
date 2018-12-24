@@ -13,7 +13,7 @@ exports.userCreateSchema = {
             .min(2)
             .required(),
         age: joi_1.number()
-            .min(0)
+            .min(1)
             .precision(0)
             .required()
     })

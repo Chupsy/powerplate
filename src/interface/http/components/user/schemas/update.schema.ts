@@ -18,7 +18,7 @@ export const userUpdateSchema = {
                 .min(2)
                 .optional(),
             age: number()
-                .min(0)
+                .min(1)
                 .precision(0)
                 .optional()
         })

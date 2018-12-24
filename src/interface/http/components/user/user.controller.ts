@@ -76,8 +76,8 @@ export class UserController implements interfaces.Controller {
      *   }
      */
     @httpGet('/:userId', celebrate(userFindOneSchema))
-    public getUser(@requestParam('userId') id: number, @response() res: express.Response): void {
-        const user = this.userApp.findUserById(id);
+    public async getUser(@requestParam('userId') id: number, @response() res: express.Response): Promise<void> {
+        const user = await this.userApp.findUserById(id);
         responseNormalizer(res, ResponseCodes.USER_FOUND, user);
     }
 
@@ -113,8 +113,8 @@ export class UserController implements interfaces.Controller {
      *
      */
     @httpGet('/')
-    public getUsers(@response() res: express.Response): void {
-        const users = this.userApp.findAllUsers();
+    public async getUsers(@response() res: express.Response): Promise<void> {
+        const users = await this.userApp.findAllUsers();
         responseNormalizer(res, ResponseCodes.USERS_FOUND, users);
     }
 
@@ -157,8 +157,8 @@ export class UserController implements interfaces.Controller {
      *   }
      */
     @httpDelete('/:userId', celebrate(userDeleteSchema))
-    public deleteUser(@requestParam('userId') id: number, @response() res: express.Response): void {
-        this.userApp.deleteUserById(id);
+    public async deleteUser(@requestParam('userId') id: number, @response() res: express.Response): Promise<void> {
+        await this.userApp.deleteUserById(id);
         responseNormalizer(res, ResponseCodes.USER_DELETED);
     }
 
@@ -217,8 +217,8 @@ export class UserController implements interfaces.Controller {
      *   }
      */
     @httpPost('/', celebrate(userCreateSchema))
-    public createUser(@request() req: express.Request, @response() res: express.Response): void {
-        const user = this.userApp.createUser(req.body);
+    public async createUser(@request() req: express.Request, @response() res: express.Response): Promise<void> {
+        const user = await this.userApp.createUser(req.body);
         responseNormalizer(res, ResponseCodes.USER_CREATED, user);
     }
 
@@ -286,12 +286,12 @@ export class UserController implements interfaces.Controller {
      *   }
      */
     @httpPut('/:userId', celebrate(userUpdateSchema))
-    public updateUser(
+    public async updateUser(
         @requestParam('userId') id: number,
         @request() req: express.Request,
         @response() res: express.Response
-    ): void {
-        const user = this.userApp.updateUser(id, req.body);
+    ): Promise<void> {
+        const user = await this.userApp.updateUser(id, req.body);
         responseNormalizer(res, ResponseCodes.USER_UPDATED, user);
     }
 }

@@ -2,12 +2,15 @@
     "dependencies": {
         "@types/chai-http": "^3.0.5",
         "@types/joi": "^14.0.0",
+        "@types/mongoose": "^5.3.3",
         "celebrate": "^9.0.1",
         "chai-http": "^4.2.0",
         "express": "^4.16.4",
         "inversify": "^5.0.1",
         "inversify-express-utils": "^6.2.0",
         "joi": "^14.0.6",
+        "mongoose": "^5.3.15",
+        "mongoose-auto-increment-reworked": "^1.2.1",
         "pretty-quick": "^1.8.0",
         "reflect-metadata": "^0.1.12",
         "tslint-config-prettier": "^1.16.0",
@@ -33,6 +36,7 @@
         "prettier": "prettier --write \"./{src,e2e}/**/*.{ts,js,scss}\"",
         "postinstall": "npm run prettier -s",
         "build": "tsc -p ./",
+        "start": "tsc -p ./ && node dist/index.js",
         "doc": "apidoc -f \".*\\.ts$\" -i src/ -o apidoc/"
     },
     "repository": {

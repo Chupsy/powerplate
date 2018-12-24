@@ -19,7 +19,7 @@ exports.userUpdateSchema = {
             .min(2)
             .optional(),
         age: joi_1.number()
-            .min(0)
+            .min(1)
             .precision(0)
             .optional()
     })

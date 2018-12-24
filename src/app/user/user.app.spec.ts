@@ -20,32 +20,35 @@ beforeEach(() => {
 });
 
 describe('User App', () => {
-    it('should allow findUserById', () => {
-        expect(userApp.findUserById(1)).to.exist;
+    it('should allow findUserById', async () => {
+        let user: any = await userApp.findUserById(1);
+        expect(user.userId).equal(1);
     });
-    it('should allow findAllUsers', () => {
-        expect(userApp.findAllUsers()).to.exist;
+    it('should allow findAllUsers', async () => {
+        let users: any[] = await userApp.findAllUsers();
+        expect(users[0].userId).equal(1);
+        expect(users[1].userId).equal(2);
     });
     it('should allow deleteUser', () => {
-        userApp.deleteUserById(1);
-        expect(userApp.deleteUserById).to.exist;
+        expect(() => userApp.deleteUserById(1)).not.to.throw();
     });
-    it('should allow createUser', () => {
-        userApp.createUser({
+    it('should allow createUser', async () => {
+        let user: any = await userApp.createUser({
             email: 'test@test.test',
             firstName: 'test',
             lastName: 'test',
             age: 12
         });
-        expect(userApp.createUser).to.exist;
+        expect(user.userId).equal(1);
+        expect(user.email).equal('test@test.test');
     });
-    it('should allow updateUser', () => {
-        userApp.updateUser(1, {
+    it('should allow updateUser', async () => {
+        let updatedUser: any = await userApp.updateUser(1, {
             email: 'test@test.test',
             firstName: 'test',
             lastName: 'test',
             age: 12
         });
-        expect(userApp.updateUser).to.exist;
+        expect(updatedUser.userId).equal(1);
     });
 });
