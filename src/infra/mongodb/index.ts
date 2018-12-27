@@ -1,12 +1,13 @@
 import { ContainerModule, interfaces } from 'inversify';
 import 'reflect-metadata';
-import INFRA_IDENTIFIERS from './identifiers';
+import INFRA_IDENTIFIERS from '../identifiers';
 import { UserInfra } from './user/user.infra';
 const uri = 'mongodb://127.0.0.1:27017/local';
 import * as mongoose from 'mongoose';
+import { UserResource } from '../resources/user/user.resource';
 
 export const mongodbInfraModule = new ContainerModule((bind: interfaces.Bind) => {
-    bind<UserInfra>(INFRA_IDENTIFIERS.UserInfra)
+    bind<UserResource>(INFRA_IDENTIFIERS.UserResource)
         .to(UserInfra)
         .inSingletonScope();
 });

@@ -1,5 +1,4 @@
 import { ContainerModule, interfaces } from 'inversify';
-import 'reflect-metadata';
 import UserApp from './user/user.app';
 import APP_IDENTIFIERS from './identifiers';
 

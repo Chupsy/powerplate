@@ -1,12 +1,6 @@
 import * as mongoose from 'mongoose';
 import { injectable } from 'inversify';
-export interface IUser extends mongoose.Document {
-    firstName: string;
-    lastName: number;
-    userId: number;
-    email: string;
-    age: number;
-}
+import { UserResource, IUser } from '../../resources/user/user.resource';
 
 export const UserSchema = new mongoose.Schema({
     userId: { type: Number, required: true, unique: true, min: 0 },
@@ -17,37 +11,54 @@ export const UserSchema = new mongoose.Schema({
 });
 
 @injectable()
-export class UserInfra {
+export class UserInfra implements UserResource {
     public User = mongoose.model('User', UserSchema);
 
-    public async findUserById(userId: number): Promise<any> {
-        return await this.User.findOne({ userId });
+    public async findUserById(userId: number): Promise<IUser> {
+        return this.convertDocumentToIUser(await this.User.findOne({ userId }));
     }
-    public async findAllUsers(): Promise<any> {
-        return await this.User.find();
+    public async findAllUsers(): Promise<IUser[]> {
+        let users = await this.User.find();
+        return users.map(user => this.convertDocumentToIUser(user));
     }
-    public async deleteUserById(userId: number): Promise<any> {
-        return await this.User.findOneAndDelete({ userId });
+    public async deleteUserById(userId: number): Promise<void> {
+        await this.User.findOneAndDelete({ userId });
     }
     public async createUser(userToCreate: {
         email: string;
         firstName: string;
         lastName: string;
         age: number;
-    }): Promise<any> {
+    }): Promise<IUser> {
         let maxUserDocument = await this.User.findOne().sort('-userId');
         let maxUser = maxUserDocument.toObject();
-        return await this.User.create({ userId: maxUser ? maxUser.userId + 1 : 1, ...userToCreate });
+        return this.convertDocumentToIUser(
+            await this.User.create({ userId: maxUser ? maxUser.userId + 1 : 1, ...userToCreate })
+        );
     }
 
     public async updateUser(
         userId: number,
         dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
     ): Promise<any> {
-        return await this.User.findOneAndUpdate({ userId }, dataToUpdate);
+        return this.convertDocumentToIUser(await this.User.findOneAndUpdate({ userId }, dataToUpdate));
     }
 
     public async findUserByEmail(email: string): Promise<any> {
-        return await this.User.findOne({ email });
+        return this.convertDocumentToIUser(await this.User.findOne({ email }));
+    }
+
+    private convertDocumentToIUser(user: mongoose.Document): IUser {
+        if (!user) {
+            return null;
+        }
+        let convertedUser = user.toObject();
+        return {
+            userId: convertedUser.userId,
+            email: convertedUser.email,
+            firstName: convertedUser.firstName,
+            lastName: convertedUser.lastName,
+            age: convertedUser.age
+        };
     }
 }

@@ -1,9 +1,8 @@
 import { injectable, inject } from 'inversify';
-import UserApp from './user.app';
-import UserFactory from '../../domain/user/user.factory';
+import UserFactory from './user.app';
 
 @injectable()
-export default class UserAppMock implements UserApp {
+export default class UserFactoryMock implements UserFactory {
     public async findUserById(userId: number): Promise<object> {
         if (userId !== 1) {
             throw new Error('data_not_found');
@@ -12,7 +11,7 @@ export default class UserAppMock implements UserApp {
             userId: 1
         };
     }
-    public async findAllUsers(): Promise<any[]> {
+    public async findAllUsers(): Promise<object[]> {
         return [
             {
                 userId: 1
@@ -40,5 +39,8 @@ export default class UserAppMock implements UserApp {
         dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
     ): Promise<object> {
         return { userId, ...dataToUpdate };
+    }
+    public async verifyEmail(): Promise<void> {
+        return null;
     }
 }

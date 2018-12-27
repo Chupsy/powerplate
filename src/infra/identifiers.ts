@@ -1,4 +1,4 @@
 const INFRA_IDENTIFIERS = {
-    UserInfra: Symbol.for('UserInfra')
+    UserResource: Symbol.for('UserResource')
 };
 export default INFRA_IDENTIFIERS;

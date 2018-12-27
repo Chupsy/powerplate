@@ -53,10 +53,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_1 = require("inversify");
-var UserAppMock = /** @class */ (function () {
-    function UserAppMock() {
+var UserFactoryMock = /** @class */ (function () {
+    function UserFactoryMock() {
     }
-    UserAppMock.prototype.findUserById = function (userId) {
+    UserFactoryMock.prototype.findUserById = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (userId !== 1) {
@@ -68,7 +68,7 @@ var UserAppMock = /** @class */ (function () {
             });
         });
     };
-    UserAppMock.prototype.findAllUsers = function () {
+    UserFactoryMock.prototype.findAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, [
@@ -82,30 +82,37 @@ var UserAppMock = /** @class */ (function () {
             });
         });
     };
-    UserAppMock.prototype.deleteUserById = function () {
+    UserFactoryMock.prototype.deleteUserById = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
             });
         });
     };
-    UserAppMock.prototype.createUser = function (userToCreate) {
+    UserFactoryMock.prototype.createUser = function (userToCreate) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, __assign({ userId: 1 }, userToCreate)];
             });
         });
     };
-    UserAppMock.prototype.updateUser = function (userId, dataToUpdate) {
+    UserFactoryMock.prototype.updateUser = function (userId, dataToUpdate) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, __assign({ userId: userId }, dataToUpdate)];
             });
         });
     };
-    UserAppMock = __decorate([
+    UserFactoryMock.prototype.verifyEmail = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, null];
+            });
+        });
+    };
+    UserFactoryMock = __decorate([
         inversify_1.injectable()
-    ], UserAppMock);
-    return UserAppMock;
+    ], UserFactoryMock);
+    return UserFactoryMock;
 }());
-exports.default = UserAppMock;
+exports.default = UserFactoryMock;

@@ -40,11 +40,9 @@ require("reflect-metadata");
 var inversify_1 = require("inversify");
 var http_1 = require("./interface/http");
 var app_1 = require("./app");
-var domain_1 = require("./domain");
 var mongodb_1 = require("./infra/mongodb");
 var loaderContainer = new inversify_1.Container();
 loaderContainer.load(mongodb_1.mongodbInfraModule);
-loaderContainer.load(domain_1.domainModule);
 loaderContainer.load(app_1.appModule);
 loaderContainer.load(http_1.httpInterfaceModule);
 (function () { return __awaiter(_this, void 0, void 0, function () {

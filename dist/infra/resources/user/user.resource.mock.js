@@ -52,116 +52,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose = require("mongoose");
 var inversify_1 = require("inversify");
-exports.UserSchema = new mongoose.Schema({
-    userId: { type: Number, required: true, unique: true, min: 0 },
-    firstName: { type: String, required: true, trim: true },
-    lastName: { type: String, required: true, trim: true },
-    email: { type: String, required: 'email_already_used', unique: true, trim: true, lowercase: true },
-    age: { type: Number, required: true, min: 0 }
-});
-var UserInfra = /** @class */ (function () {
-    function UserInfra() {
-        this.User = mongoose.model('User', exports.UserSchema);
+var UserResourceMock = /** @class */ (function () {
+    function UserResourceMock() {
     }
-    UserInfra.prototype.findUserById = function (userId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this.convertDocumentToIUser;
-                        return [4 /*yield*/, this.User.findOne({ userId: userId })];
-                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
-                }
-            });
-        });
-    };
-    UserInfra.prototype.findAllUsers = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var users;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.User.find()];
-                    case 1:
-                        users = _a.sent();
-                        return [2 /*return*/, users.map(function (user) { return _this.convertDocumentToIUser(user); })];
-                }
-            });
-        });
-    };
-    UserInfra.prototype.deleteUserById = function (userId) {
+    UserResourceMock.prototype.findUserById = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.User.findOneAndDelete({ userId: userId })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
+                if (userId !== 1) {
+                    return [2 /*return*/, null];
                 }
+                return [2 /*return*/, {
+                        userId: 1
+                    }];
             });
         });
     };
-    UserInfra.prototype.createUser = function (userToCreate) {
+    UserResourceMock.prototype.findAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var maxUserDocument, maxUser, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.User.findOne().sort('-userId')];
-                    case 1:
-                        maxUserDocument = _b.sent();
-                        maxUser = maxUserDocument.toObject();
-                        _a = this.convertDocumentToIUser;
-                        return [4 /*yield*/, this.User.create(__assign({ userId: maxUser ? maxUser.userId + 1 : 1 }, userToCreate))];
-                    case 2: return [2 /*return*/, _a.apply(this, [_b.sent()])];
-                }
+            return __generator(this, function (_a) {
+                return [2 /*return*/, [
+                        {
+                            userId: 1
+                        },
+                        {
+                            userId: 2
+                        }
+                    ]];
             });
         });
     };
-    UserInfra.prototype.updateUser = function (userId, dataToUpdate) {
+    UserResourceMock.prototype.deleteUserById = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this.convertDocumentToIUser;
-                        return [4 /*yield*/, this.User.findOneAndUpdate({ userId: userId }, dataToUpdate)];
-                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
-                }
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
             });
         });
     };
-    UserInfra.prototype.findUserByEmail = function (email) {
+    UserResourceMock.prototype.createUser = function (userToCreate) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = this.convertDocumentToIUser;
-                        return [4 /*yield*/, this.User.findOne({ email: email })];
-                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
-                }
+            return __generator(this, function (_a) {
+                return [2 /*return*/, __assign({ userId: 1 }, userToCreate)];
             });
         });
     };
-    UserInfra.prototype.convertDocumentToIUser = function (user) {
-        if (!user) {
-            return null;
-        }
-        var convertedUser = user.toObject();
-        return {
-            userId: convertedUser.userId,
-            email: convertedUser.email,
-            firstName: convertedUser.firstName,
-            lastName: convertedUser.lastName,
-            age: convertedUser.age
-        };
+    UserResourceMock.prototype.updateUser = function (userId, dataToUpdate) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, __assign({ userId: userId }, dataToUpdate)];
+            });
+        });
     };
-    UserInfra = __decorate([
+    UserResourceMock.prototype.findUserByEmail = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (email === 'email@already.used') {
+                    return [2 /*return*/, {}];
+                }
+                return [2 /*return*/, null];
+            });
+        });
+    };
+    UserResourceMock = __decorate([
         inversify_1.injectable()
-    ], UserInfra);
-    return UserInfra;
+    ], UserResourceMock);
+    return UserResourceMock;
 }());
-exports.UserInfra = UserInfra;
+exports.default = UserResourceMock;

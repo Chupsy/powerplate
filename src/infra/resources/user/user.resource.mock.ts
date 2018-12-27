@@ -1,8 +1,8 @@
 import { injectable, inject } from 'inversify';
-import { UserInfra } from './user.infra';
+import { UserResource } from './user.resource';
 
 @injectable()
-export default class UserInfraMock implements UserInfra {
+export default class UserResourceMock implements UserResource {
     public User: any;
     public async findUserById(userId: number): Promise<any> {
         if (userId !== 1) {

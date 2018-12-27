@@ -1,24 +1,33 @@
 import { injectable, inject } from 'inversify';
-import UserFactory from './../../domain/user/user.factory';
-import DOMAIN_IDENTIFIERS from '../../domain/identifiers';
+import INFRA_IDENTIFIERS from '../../infra/identifiers';
+import { UserResource } from '../../infra/resources/user/user.resource';
+
 @injectable()
 export default class UserApp {
-    protected userFactory?: UserFactory;
+    protected userResource?: UserResource;
 
-    constructor(@inject(DOMAIN_IDENTIFIERS.UserFactory) userFactory: UserFactory) {
-        this.userFactory = userFactory;
+    constructor(@inject(INFRA_IDENTIFIERS.UserResource) userResource: UserResource) {
+        this.userResource = userResource;
     }
 
     public async findUserById(userId: number): Promise<object> {
-        return await this.userFactory.findUserById(userId);
+        const foundUser = await this.userResource.findUserById(userId);
+        if (!foundUser) {
+            throw new Error('data_not_found');
+        }
+        return foundUser;
     }
 
     public async findAllUsers(): Promise<object[]> {
-        return await this.userFactory.findAllUsers();
+        return await this.userResource.findAllUsers();
     }
 
     public async deleteUserById(userId: number): Promise<void> {
-        return await this.userFactory.deleteUserById(userId);
+        const foundUser = await this.userResource.findUserById(userId);
+        if (!foundUser) {
+            throw new Error('data_not_found');
+        }
+        return await this.userResource.deleteUserById(userId);
     }
 
     public async createUser(userToCreate: {
@@ -27,12 +36,33 @@ export default class UserApp {
         lastName: string;
         age: number;
     }): Promise<object> {
-        return await this.userFactory.createUser(userToCreate);
+        await this.verifyEmail(userToCreate.email);
+        if (userToCreate.age <= 0) {
+            throw new Error('invalid_age');
+        }
+        let createdUser = await this.userResource.createUser({ ...userToCreate });
+
+        return createdUser;
     }
     public async updateUser(
         userId: number,
         dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
     ): Promise<object> {
-        return await this.userFactory.updateUser(userId, dataToUpdate);
+        const foundUser = await this.userResource.findUserById(userId);
+        if (!foundUser) {
+            throw new Error('data_not_found');
+        }
+        if (dataToUpdate.age <= 0) {
+            throw new Error('invalid_age');
+        }
+        dataToUpdate.email && (await this.verifyEmail(dataToUpdate.email, userId));
+        return await this.userResource.updateUser(userId, dataToUpdate);
+    }
+
+    public async verifyEmail(email: string, userId?: number): Promise<void> {
+        let user = await this.userResource.findUserByEmail(email);
+        if (user && (!userId || userId !== user.userId)) {
+            throw new Error('email_already_used');
+        }
     }
 }
