@@ -46,13 +46,16 @@ exports.mongodbInfraModule = new inversify_1.ContainerModule(function (bind) {
         .to(user_infra_1.UserInfra)
         .inSingletonScope();
 });
-function start() {
+function start(container) {
     return __awaiter(this, void 0, void 0, function () {
+        var userInfra;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, mongoose.connect(uri, { useNewUrlParser: true })];
                 case 1:
                     _a.sent();
+                    userInfra = container.get(identifiers_1.default.UserResource);
+                    userInfra.init(mongoose);
                     console.log('database ready');
                     return [2 /*return*/];
             }

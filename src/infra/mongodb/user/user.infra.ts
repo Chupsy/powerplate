@@ -12,7 +12,11 @@ export const UserSchema = new mongoose.Schema({
 
 @injectable()
 export class UserInfra implements UserResource {
-    public User = mongoose.model('User', UserSchema);
+    private User: mongoose.Model<mongoose.Document, {}>;
+
+    public init(db: any) {
+        this.User = db.model('User', UserSchema);
+    }
 
     public async findUserById(userId: number): Promise<IUser> {
         return this.convertDocumentToIUser(await this.User.findOne({ userId }));
@@ -41,7 +45,8 @@ export class UserInfra implements UserResource {
         userId: number,
         dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
     ): Promise<any> {
-        return this.convertDocumentToIUser(await this.User.findOneAndUpdate({ userId }, dataToUpdate));
+        await this.User.findOneAndUpdate({ userId }, dataToUpdate);
+        return this.convertDocumentToIUser(await this.User.findOne({ userId }));
     }
 
     public async findUserByEmail(email: string): Promise<any> {

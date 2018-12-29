@@ -63,8 +63,10 @@ exports.UserSchema = new mongoose.Schema({
 });
 var UserInfra = /** @class */ (function () {
     function UserInfra() {
-        this.User = mongoose.model('User', exports.UserSchema);
     }
+    UserInfra.prototype.init = function (db) {
+        this.User = db.model('User', exports.UserSchema);
+    };
     UserInfra.prototype.findUserById = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
             var _a;
@@ -125,10 +127,12 @@ var UserInfra = /** @class */ (function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
+                    case 0: return [4 /*yield*/, this.User.findOneAndUpdate({ userId: userId }, dataToUpdate)];
+                    case 1:
+                        _b.sent();
                         _a = this.convertDocumentToIUser;
-                        return [4 /*yield*/, this.User.findOneAndUpdate({ userId: userId }, dataToUpdate)];
-                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
+                        return [4 /*yield*/, this.User.findOne({ userId: userId })];
+                    case 2: return [2 /*return*/, _a.apply(this, [_b.sent()])];
                 }
             });
         });

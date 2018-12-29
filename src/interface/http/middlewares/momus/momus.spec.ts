@@ -68,4 +68,17 @@ describe('momus', () => {
         result.error.isJoi = false;
         momus(result.error, null, resMock, null);
     });
+
+    it('should call throw invalid json input if error is entity parse fail', done => {
+        const expectedResponse: ApiResponse = responseList.get(ResponseCodes.INVALID_JSON_INPUT);
+        resMock.registerCallback((response: any, statusNumber: number) => {
+            expect(statusNumber).equal(expectedResponse.status);
+            expect(response.status).equal(expectedResponse.status);
+            expect(response.code).equal(expectedResponse.code);
+            expect(response.message).equal(expectedResponse.message);
+            expect(response.data).be.undefined;
+            done();
+        });
+        momus({ type: 'entity.parse.failed' }, null, resMock, null);
+    });
 });

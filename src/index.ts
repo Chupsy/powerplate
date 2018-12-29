@@ -9,7 +9,7 @@ loaderContainer.load(mongodbInfraModule);
 loaderContainer.load(appModule);
 loaderContainer.load(httpInterfaceModule);
 (async () => {
-    await databaseStart();
+    await databaseStart(loaderContainer);
     httpInit(loaderContainer);
     httpStart();
 })();

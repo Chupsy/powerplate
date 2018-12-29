@@ -8,7 +8,8 @@ export enum ResponseCodes {
     EMAIL_ALREADY_USED = 'email_already_used',
     INVALID_PARAMETERS = 'invalid_parameters',
     INTERNAL_SERVER_ERROR = 'internal_server_error',
-    INVALID_AGE = 'invalid_age'
+    INVALID_AGE = 'invalid_age',
+    INVALID_JSON_INPUT = 'invalid_json_input'
 }
 
 export const responseList = new Map<string, ApiResponse>([
@@ -90,6 +91,14 @@ export const responseList = new Map<string, ApiResponse>([
             code: 'internal_server_error',
             status: 500,
             message: 'Internal server error.'
+        }
+    ],
+    [
+        ResponseCodes.INVALID_JSON_INPUT,
+        {
+            code: 'invalid_json_input',
+            status: 400,
+            message: 'Invalid JSON input.'
         }
     ]
 ]);

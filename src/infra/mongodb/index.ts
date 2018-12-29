@@ -1,4 +1,4 @@
-import { ContainerModule, interfaces } from 'inversify';
+import { ContainerModule, interfaces, Container } from 'inversify';
 import 'reflect-metadata';
 import INFRA_IDENTIFIERS from '../identifiers';
 import { UserInfra } from './user/user.infra';
@@ -12,11 +12,13 @@ export const mongodbInfraModule = new ContainerModule((bind: interfaces.Bind) =>
         .inSingletonScope();
 });
 
-export async function start() {
+export async function start(container: Container) {
     await mongoose.connect(
         uri,
         { useNewUrlParser: true }
     );
+    let userInfra: UserInfra = container.get(INFRA_IDENTIFIERS.UserResource);
+    userInfra.init(mongoose);
     console.log('database ready');
     return;
 }
