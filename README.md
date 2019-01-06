@@ -6,6 +6,10 @@
 
 #### HTTP
 
+Config required :
+
+-   port : express port to run
+
 Technologies :
 
 -   [Joi](https://github.com/hapijs/joi)
@@ -131,7 +135,7 @@ Routes :
         }
         ```
 
-Default format reply :
+Default reply format :
 
 ```
 {
@@ -148,11 +152,9 @@ Default format reply :
 }
 ```
 
-#### RMQ
-
-Not implemented yet
-
 ### App
+
+Contains the logic of the service. It is connected to an infra provided directly at launch time and will use it as data provider.
 
 Technologies :
 
@@ -160,27 +162,28 @@ Technologies :
 
 Requires :
 
--   User.domain.ts (domain layer)
+-   User.resource.ts (infra layer)
 
 Structure :
 
 ```
 |- index.ts
+|- identifiers.ts
 |- user
     |- user.app.ts
 ```
 
 Methods :
 
--   findAll
+-   findAllUsers
     -   arguments : none
     -   return users as array of object
--   findOne
+-   findUserById
     -   arguments : userId (number)
     -   return user as object
     -   Errors :
         -   data_not_found
--   create
+-   createUser
     -   arguments : object({
         firstName: string,
         lastName: string,
@@ -191,7 +194,7 @@ Methods :
     -   errors :
         -   email_already_used
         -   invalid_age
--   update
+-   updateUser
     -   arguments : userId (number), object({
         firstName?: string,
         lastName?: string,
@@ -203,75 +206,69 @@ Methods :
         -   email_already_used
         -   data_not_found
         -   invalid_age
--   delete
+-   deleteUserById
     -   arguments : userId number
     -   void
     -   errors :
         -   data_not_found
+-   verifyEmail
+    -   arguments : email (string), userId? (number)
+    -   void
+    -   errors :
+        -   email_already_used
 
-### Domain
+### Infra
 
-_Domain services hold domain logic whereas application services don’t._
+#### Resources
 
-_Domain logic is everything that is related to business decisions. It holds the business decision where app only orchestrate those business decisions_
+Contains all the abstract classes used by the app. If a new infra is added, it should always extend this abstract class.
+
+#### MongoDb
+
+Config required :
+
+-   uri : MongoDB uri
 
 Technologies :
 
 -   [Inversify](https://github.com/inversify/InversifyJS)
-
-Requires :
-
--   User.infra.ts (domain layer)
+-   [Mongoose](https://mongoosejs.com/)
 
 Structure :
 
 ```
 |- index.ts
 |- user
-    |- user.domain.ts
-    |- user.ts
+    |- user.infra.ts
 ```
 
-userDomain methods :
+Methods :
 
--   findOne
-    -   arguments : userId (number)
-    -   return User.toJSON
-    -   errors :
-        -   data_not_found
--   findAll
+-   findAllUsers
     -   arguments : none
-    -   return array of User.toJSON
-    -   errors : none
--   update
+    -   return users as array of object
+-   findUserById
+    -   arguments : userId (number)
+    -   return user as object
+-   createUser
+    -   arguments : object({
+        firstName: string,
+        lastName: string,
+        email: string,
+        age: number
+        })
+    -   return user as object
+-   updateUser
     -   arguments : userId (number), object({
         firstName?: string,
         lastName?: string,
         email?: string,
         age?: number
         })
-    -   return User.toJSON
-    -   errors :
-        -   data_not_found
-        -   email_alread_used
-        -   invalid_age
--   create
-    -   arguments : object({
-        firstName?: string,
-        lastName?: string,
-        email?: string,
-        age?: number
-        })
-    -   return User.toJSON
-    -   errors :
-        -   email_already_used
-        -   invalid_age
--   delete
-    -   arguments : userId(number)
+    -   return user as object
+-   deleteUserById
+    -   arguments : userId number
     -   void
-    -   errors :
-        -   data_not_found
-
-### Infra
-
-### Errors
+-   findUserByEmail
+    -   arguments : email (string)
+    -   return user as object

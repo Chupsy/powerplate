@@ -2,7 +2,6 @@ import { ContainerModule, interfaces, Container } from 'inversify';
 import 'reflect-metadata';
 import INFRA_IDENTIFIERS from '../identifiers';
 import { UserInfra } from './user/user.infra';
-const uri = 'mongodb://127.0.0.1:27017/local';
 import * as mongoose from 'mongoose';
 import { UserResource } from '../resources/user/user.resource';
 
@@ -12,9 +11,9 @@ export const mongodbInfraModule = new ContainerModule((bind: interfaces.Bind) =>
         .inSingletonScope();
 });
 
-export async function start(container: Container) {
+export async function start(container: Container, config: any) {
     await mongoose.connect(
-        uri,
+        config.uri,
         { useNewUrlParser: true }
     );
     let userInfra: UserInfra = container.get(INFRA_IDENTIFIERS.UserResource);
