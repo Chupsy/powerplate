@@ -21,7 +21,6 @@
         "chai-http": "^4.2.0",
         "mocha": "^5.2.0",
         "nyc": "^13.1.0",
-        "pre-commit": "^1.2.2",
         "prettier": "^1.15.2",
         "pretty-quick": "^1.8.0",
         "ts-node": "^7.0.1",
@@ -38,14 +37,9 @@
         "postinstall": "npm run prettier -s",
         "build": "tsc -p ./",
         "start": "tsc -p ./ && node dist/index.js",
-        "doc": "apidoc -f \".*\\.ts$\" -i src/ -o apidoc/"
+        "doc": "apidoc -f \".*\\.ts$\" -i src/ -o apidoc/",
+        "precommit": "npm run prettier && npm run test && npm run build && npm run doc"
     },
-    "pre-commit": [
-        "prettier",
-        "test",
-        "build",
-        "doc"
-    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Chupsy/powerplate.git"
