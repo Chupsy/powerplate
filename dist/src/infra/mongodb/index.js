@@ -39,7 +39,6 @@ var inversify_1 = require("inversify");
 require("reflect-metadata");
 var identifiers_1 = require("../identifiers");
 var user_infra_1 = require("./user/user.infra");
-var uri = 'mongodb://127.0.0.1:27017/local';
 var mongoose = require("mongoose");
 exports.mongodbInfraModule = new inversify_1.ContainerModule(function (bind) {
     bind(identifiers_1.default.UserResource)
