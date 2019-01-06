@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 const loaderContainer = new Container();
 loaderContainer.load(appModuleMock);
 loaderContainer.load(httpInterfaceModule);
-init(loaderContainer);
+init(loaderContainer, { port: 8080 });
 
 describe('Hello API Request', () => {
     it('should start the server', () => {
