@@ -12,6 +12,7 @@ var ResponseCodes;
     ResponseCodes["INVALID_PARAMETERS"] = "invalid_parameters";
     ResponseCodes["INTERNAL_SERVER_ERROR"] = "internal_server_error";
     ResponseCodes["INVALID_AGE"] = "invalid_age";
+    ResponseCodes["INVALID_OLD_PASSWORD"] = "invalid_old_password";
     ResponseCodes["INVALID_JSON_INPUT"] = "invalid_json_input";
 })(ResponseCodes = exports.ResponseCodes || (exports.ResponseCodes = {}));
 exports.responseList = new Map([
@@ -101,6 +102,14 @@ exports.responseList = new Map([
             code: 'invalid_json_input',
             status: 400,
             message: 'Invalid JSON input.'
+        }
+    ],
+    [
+        ResponseCodes.INVALID_OLD_PASSWORD,
+        {
+            code: 'invalid_old_password',
+            status: 400,
+            message: 'Invalid old password.'
         }
     ]
 ]);

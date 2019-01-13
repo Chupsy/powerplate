@@ -61,6 +61,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_1 = require("inversify");
 var identifiers_1 = require("../../infra/identifiers");
 var user_resource_1 = require("../../infra/resources/user/user.resource");
+var user_1 = require("./user");
+var crypto = require("crypto");
+var sha256 = require("sha256");
 var UserApp = /** @class */ (function () {
     function UserApp(userResource) {
         this.userResource = userResource;
@@ -76,17 +79,21 @@ var UserApp = /** @class */ (function () {
                         if (!foundUser) {
                             throw new Error('data_not_found');
                         }
-                        return [2 /*return*/, foundUser];
+                        return [2 /*return*/, new user_1.default(this.userResource, foundUser).export()];
                 }
             });
         });
     };
     UserApp.prototype.findAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var users;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.userResource.findAllUsers()];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        users = _a.sent();
+                        return [2 /*return*/, users.map(function (user) { return new user_1.default(_this.userResource, user).export(); })];
                 }
             });
         });
@@ -110,7 +117,7 @@ var UserApp = /** @class */ (function () {
     };
     UserApp.prototype.createUser = function (userToCreate) {
         return __awaiter(this, void 0, void 0, function () {
-            var createdUser;
+            var passwordSalt, createdUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.verifyEmail(userToCreate.email)];
@@ -119,17 +126,18 @@ var UserApp = /** @class */ (function () {
                         if (userToCreate.age <= 0) {
                             throw new Error('invalid_age');
                         }
-                        return [4 /*yield*/, this.userResource.createUser(__assign({}, userToCreate))];
+                        passwordSalt = crypto.randomBytes(32).toString('hex');
+                        return [4 /*yield*/, this.userResource.createUser(__assign({}, userToCreate, { password: sha256(userToCreate.password + sha256(passwordSalt)), passwordSalt: passwordSalt }))];
                     case 2:
                         createdUser = _a.sent();
-                        return [2 /*return*/, createdUser];
+                        return [2 /*return*/, new user_1.default(this.userResource, createdUser).export()];
                 }
             });
         });
     };
     UserApp.prototype.updateUser = function (userId, dataToUpdate) {
         return __awaiter(this, void 0, void 0, function () {
-            var foundUser, _a;
+            var foundUser, _a, user;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.userResource.findUserById(userId)];
@@ -137,9 +145,6 @@ var UserApp = /** @class */ (function () {
                         foundUser = _b.sent();
                         if (!foundUser) {
                             throw new Error('data_not_found');
-                        }
-                        if (dataToUpdate.age <= 0) {
-                            throw new Error('invalid_age');
                         }
                         _a = dataToUpdate.email;
                         if (!_a) return [3 /*break*/, 3];
@@ -149,8 +154,11 @@ var UserApp = /** @class */ (function () {
                         _b.label = 3;
                     case 3:
                         _a;
-                        return [4 /*yield*/, this.userResource.updateUser(userId, dataToUpdate)];
-                    case 4: return [2 /*return*/, _b.sent()];
+                        user = new user_1.default(this.userResource, foundUser);
+                        return [4 /*yield*/, user.update(dataToUpdate)];
+                    case 4:
+                        _b.sent();
+                        return [2 /*return*/, user.export()];
                 }
             });
         });

@@ -91,7 +91,8 @@ describe('userController', () => {
                         email: 'test@test.com',
                         firstName: 'testFirstName',
                         lastName: 'testLastName',
-                        age: 12
+                        age: 12,
+                        password: 'azerty'
                     }
                 },
                 resMock
@@ -117,7 +118,9 @@ describe('userController', () => {
                         email: 'test@test.com',
                         firstName: 'testFirstName',
                         lastName: 'testLastName',
-                        age: 12
+                        age: 12,
+                        password: 'azerty',
+                        oldPassword: 'ytreza'
                     }
                 },
                 resMock

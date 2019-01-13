@@ -20,7 +20,12 @@ export const userUpdateSchema = {
             age: number()
                 .min(1)
                 .precision(0)
-                .optional()
+                .optional(),
+            password: string()
+                .min(6)
+                .optional(),
+            oldPassword: string().optional()
         })
-        .or('email', 'firstName', 'lastName', 'age')
+        .or('email', 'firstName', 'lastName', 'age', 'password')
+        .with('password', 'oldPassword')
 };

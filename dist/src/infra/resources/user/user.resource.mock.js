@@ -53,6 +53,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_1 = require("inversify");
+var sha256 = require("sha256");
 var UserResourceMock = /** @class */ (function () {
     function UserResourceMock() {
     }
@@ -63,7 +64,13 @@ var UserResourceMock = /** @class */ (function () {
                     return [2 /*return*/, null];
                 }
                 return [2 /*return*/, {
-                        userId: 1
+                        userId: 1,
+                        firstName: 'fName',
+                        lastName: 'lName',
+                        age: 12,
+                        email: 'valid@user.com',
+                        password: sha256('azerty' + sha256('1234AZER')),
+                        passwordSalt: '1234AZER'
                     }];
             });
         });

@@ -58,6 +58,8 @@ exports.UserSchema = new mongoose.Schema({
     userId: { type: Number, required: true, unique: true, min: 0 },
     firstName: { type: String, required: true, trim: true },
     lastName: { type: String, required: true, trim: true },
+    password: { type: String, required: true },
+    passwordSalt: { type: String, required: true },
     email: { type: String, required: 'email_already_used', unique: true, trim: true, lowercase: true },
     age: { type: Number, required: true, min: 0 }
 });
@@ -160,7 +162,9 @@ var UserInfra = /** @class */ (function () {
             email: convertedUser.email,
             firstName: convertedUser.firstName,
             lastName: convertedUser.lastName,
-            age: convertedUser.age
+            age: convertedUser.age,
+            password: convertedUser.password,
+            passwordSalt: convertedUser.passwordSalt
         };
     };
     UserInfra = __decorate([

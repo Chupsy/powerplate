@@ -1,5 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { UserResource } from './user.resource';
+import * as sha256 from 'sha256';
 
 @injectable()
 export default class UserResourceMock implements UserResource {
@@ -9,7 +10,13 @@ export default class UserResourceMock implements UserResource {
             return null;
         }
         return {
-            userId: 1
+            userId: 1,
+            firstName: 'fName',
+            lastName: 'lName',
+            age: 12,
+            email: 'valid@user.com',
+            password: sha256('azerty' + sha256('1234AZER')),
+            passwordSalt: '1234AZER'
         };
     }
     public async findAllUsers(): Promise<any[]> {

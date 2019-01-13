@@ -88,4 +88,19 @@ describe('userUpdateSchema', () => {
         expect(result.error.details.length).to.equal(1);
         expect(result.error.details[0].type).to.equal('any.required');
     });
+
+    it('should refuse password if old password is not there', () => {
+        const result = validate(
+            {
+                params: { userId: 1 },
+                body: {
+                    password: 'azerty'
+                }
+            },
+            userUpdateSchema
+        );
+        expect(result.error).to.be.an('error');
+        expect(result.error.details.length).to.equal(1);
+        expect(result.error.details[0].type).to.equal('object.with');
+    });
 });

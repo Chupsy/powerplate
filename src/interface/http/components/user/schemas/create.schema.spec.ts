@@ -11,7 +11,8 @@ describe('userCreateSchema', () => {
                     firstName: 'John',
                     lastName: 'Doe',
                     email: 'john@doe.com',
-                    age: 30
+                    age: 30,
+                    password: 'azerty'
                 }
             },
             userCreateSchema
@@ -26,7 +27,8 @@ describe('userCreateSchema', () => {
                     firstName: 'John',
                     lastName: 'Doe',
                     email: 'invalidEmail',
-                    age: 30
+                    age: 30,
+                    password: 'azerty'
                 }
             },
             userCreateSchema
@@ -43,7 +45,8 @@ describe('userCreateSchema', () => {
                     firstName: 'John',
                     lastName: 'Doe',
                     email: 'valid@email.com',
-                    age: -2
+                    age: -2,
+                    password: 'azerty'
                 }
             },
             userCreateSchema
@@ -52,14 +55,31 @@ describe('userCreateSchema', () => {
         expect(result.error.details.length).to.equal(1);
         expect(result.error.details[0].type).to.equal('number.min');
     });
-
+    it('should refuse invalid password', () => {
+        const result = validate(
+            {
+                body: {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    email: 'valid@email.com',
+                    age: 24,
+                    password: 'fd'
+                }
+            },
+            userCreateSchema
+        );
+        expect(result.error).to.be.an('error');
+        expect(result.error.details.length).to.equal(1);
+        expect(result.error.details[0].type).to.equal('string.min');
+    });
     it('should refuse missing parameters', () => {
         const result = validate(
             {
                 body: {
                     firstName: 'John',
                     lastName: 'Doe',
-                    email: 'valid@email.com'
+                    email: 'valid@email.com',
+                    password: 'azerty'
                 }
             },
             userCreateSchema

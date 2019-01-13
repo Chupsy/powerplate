@@ -1,6 +1,9 @@
 import { injectable, inject } from 'inversify';
 import INFRA_IDENTIFIERS from '../../infra/identifiers';
 import { UserResource } from '../../infra/resources/user/user.resource';
+import User from './user';
+import * as crypto from 'crypto';
+import sha256 = require('sha256');
 
 @injectable()
 export default class UserApp {
@@ -15,11 +18,12 @@ export default class UserApp {
         if (!foundUser) {
             throw new Error('data_not_found');
         }
-        return foundUser;
+        return new User(this.userResource, foundUser).export();
     }
 
     public async findAllUsers(): Promise<object[]> {
-        return await this.userResource.findAllUsers();
+        const users = await this.userResource.findAllUsers();
+        return users.map(user => new User(this.userResource, user).export());
     }
 
     public async deleteUserById(userId: number): Promise<void> {
@@ -35,28 +39,40 @@ export default class UserApp {
         firstName: string;
         lastName: string;
         age: number;
+        password: string;
     }): Promise<object> {
         await this.verifyEmail(userToCreate.email);
         if (userToCreate.age <= 0) {
             throw new Error('invalid_age');
         }
-        let createdUser = await this.userResource.createUser({ ...userToCreate });
+        const passwordSalt = crypto.randomBytes(32).toString('hex');
+        let createdUser = await this.userResource.createUser({
+            ...userToCreate,
+            password: sha256(userToCreate.password + sha256(passwordSalt)),
+            passwordSalt
+        });
 
-        return createdUser;
+        return new User(this.userResource, createdUser).export();
     }
     public async updateUser(
         userId: number,
-        dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
+        dataToUpdate: {
+            email?: string;
+            firstName?: string;
+            lastName?: string;
+            age?: number;
+            password?: string;
+            oldPassword?: string;
+        }
     ): Promise<object> {
         const foundUser = await this.userResource.findUserById(userId);
         if (!foundUser) {
             throw new Error('data_not_found');
         }
-        if (dataToUpdate.age <= 0) {
-            throw new Error('invalid_age');
-        }
         dataToUpdate.email && (await this.verifyEmail(dataToUpdate.email, userId));
-        return await this.userResource.updateUser(userId, dataToUpdate);
+        const user = new User(this.userResource, foundUser);
+        await user.update(dataToUpdate);
+        return user.export();
     }
 
     public async verifyEmail(email: string, userId?: number): Promise<void> {

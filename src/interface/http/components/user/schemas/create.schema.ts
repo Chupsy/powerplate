@@ -14,6 +14,9 @@ export const userCreateSchema = {
         age: number()
             .min(1)
             .precision(0)
+            .required(),
+        password: string()
+            .min(6)
             .required()
     })
 };

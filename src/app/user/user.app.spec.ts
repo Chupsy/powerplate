@@ -52,7 +52,8 @@ describe('User App', () => {
             email: 'test@test.test',
             firstName: 'test',
             lastName: 'test',
-            age: 12
+            age: 12,
+            password: 'azerty'
         });
         expect(user.userId).equal(1);
     });
@@ -61,7 +62,8 @@ describe('User App', () => {
             email: 'email@already.used',
             firstName: 'test',
             lastName: 'test',
-            age: 12
+            age: 12,
+            password: 'azerty'
         };
         try {
             await userApp.createUser(userData);
@@ -75,7 +77,8 @@ describe('User App', () => {
             email: 'not@used.email',
             firstName: 'test',
             lastName: 'test',
-            age: -2
+            age: -2,
+            password: 'azerty'
         };
         try {
             await userApp.createUser(userData);
@@ -89,7 +92,9 @@ describe('User App', () => {
             email: 'test@test.test',
             firstName: 'test',
             lastName: 'test',
-            age: 12
+            age: 12,
+            password: 'azerty22',
+            oldPassword: 'azerty'
         });
         expect(updatedUser.userId).equal(1);
         expect(updatedUser.email).equal('test@test.test');
@@ -99,7 +104,9 @@ describe('User App', () => {
             email: 'email@already.used',
             firstName: 'test',
             lastName: 'test',
-            age: 12
+            age: 12,
+            password: 'azerty',
+            oldPassword: 'ytreza'
         };
         try {
             await userApp.updateUser(1, dataToUpdate);
@@ -113,7 +120,9 @@ describe('User App', () => {
             email: 'not@used.email',
             firstName: 'test',
             lastName: 'test',
-            age: 12
+            age: 12,
+            password: 'azerty',
+            oldPassword: 'ytreza'
         };
         try {
             await userApp.updateUser(2, dataToUpdate);
@@ -133,6 +142,47 @@ describe('User App', () => {
             assert.fail('factory should throw an error if age is invalid');
         } catch (error) {
             expect(error.message).equal('invalid_age');
+        }
+    });
+
+    it('should updateUser even if no password provided', async () => {
+        let dataToUpdate = {
+            firstName: 'test',
+            lastName: 'test'
+        };
+        let updatedUser: any = await userApp.updateUser(1, dataToUpdate);
+        expect(updatedUser.userId).equal(1);
+        expect(updatedUser.firstName).equal('test');
+        expect(updatedUser.lastName).equal('test');
+    });
+    it('should not allow updateUser if old password is invalid', async () => {
+        let dataToUpdate = {
+            firstName: 'test',
+            lastName: 'test',
+            age: 22,
+            password: 'azerty',
+            oldPassword: 'invalid'
+        };
+        try {
+            await userApp.updateUser(1, dataToUpdate);
+            assert.fail('factory should throw an error if old password is invalid');
+        } catch (error) {
+            expect(error.message).equal('invalid_old_password');
+        }
+    });
+
+    it('should not allow updateUser if password is there but old password is not', async () => {
+        let dataToUpdate = {
+            firstName: 'test',
+            lastName: 'test',
+            age: 22,
+            password: 'azerty'
+        };
+        try {
+            await userApp.updateUser(1, dataToUpdate);
+            assert.fail('factory should throw an error if password is there but old password is not');
+        } catch (error) {
+            expect(error.message).equal('missing_parameters');
         }
     });
 });

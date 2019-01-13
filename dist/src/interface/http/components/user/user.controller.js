@@ -232,6 +232,7 @@ var UserController = /** @class */ (function () {
      * @apiParam {String} firstName User firstName.
      * @apiParam {String} lastName  User lastName.
      * @apiParam {Number} age       User age.
+     * @apiParam {String} password  User password.
      *
      * @apiSuccess {String} code            request status code.
      * @apiSuccess {Number} status          request status.
@@ -296,11 +297,13 @@ var UserController = /** @class */ (function () {
      * @apiName UpdateUser
      * @apiGroup User
      *
-     * @apiParam {number} userId    User Id.
-     * @apiParam {String} [email]     User email.
-     * @apiParam {String} [firstName] User firstName.
-     * @apiParam {String} [lastName]  User lastName.
-     * @apiParam {Number} [age]       User age.
+     * @apiParam {number} userId        User Id.
+     * @apiParam {String} [email]       User email.
+     * @apiParam {String} [firstName]   User firstName.
+     * @apiParam {String} [lastName]    User lastName.
+     * @apiParam {Number} [age]         User age.
+     * @apiParam {String} [password]    User new password.
+     * @apiParam {String} [oldPassword] User old password.
      *
      * @apiSuccess {String} code            request status code.
      * @apiSuccess {Number} status          request status.

@@ -49,7 +49,7 @@ describe('Hello API Request', () => {
         return chai
             .request(serverInstance)
             .post('/users')
-            .send({ email: 'test@test.com', firstName: 'john', lastName: 'doe', age: 31 })
+            .send({ email: 'test@test.com', firstName: 'john', lastName: 'doe', age: 31, password: 'azerty' })
             .then(res => {
                 chai.expect(res.body.status).to.equal(201);
                 chai.expect(res.body.data.userId).to.equal(1);

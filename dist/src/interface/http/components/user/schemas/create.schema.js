@@ -15,6 +15,9 @@ exports.userCreateSchema = {
         age: joi_1.number()
             .min(1)
             .precision(0)
+            .required(),
+        password: joi_1.string()
+            .min(6)
             .required()
     })
 };

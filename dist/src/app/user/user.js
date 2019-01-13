@@ -1,20 +1,12 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -53,69 +45,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_1 = require("inversify");
-var UserResourceMock = /** @class */ (function () {
-    function UserResourceMock() {
+var sha256 = require("sha256");
+var user_resource_1 = require("../../infra/resources/user/user.resource");
+var User = /** @class */ (function () {
+    function User(userResource, userData) {
+        this.updateData(userData);
+        this.userResource = userResource;
     }
-    UserResourceMock.prototype.findUserById = function (userId) {
+    User.prototype.update = function (dataToUpdate) {
         return __awaiter(this, void 0, void 0, function () {
+            var updatedData;
             return __generator(this, function (_a) {
-                if (userId !== 1) {
-                    return [2 /*return*/, null];
-                }
-                return [2 /*return*/, {
-                        userId: 1
-                    }];
-            });
-        });
-    };
-    UserResourceMock.prototype.findAllUsers = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, [
-                        {
-                            userId: 1
-                        },
-                        {
-                            userId: 2
+                switch (_a.label) {
+                    case 0:
+                        if (dataToUpdate.age <= 0) {
+                            throw new Error('invalid_age');
                         }
-                    ]];
-            });
-        });
-    };
-    UserResourceMock.prototype.deleteUserById = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    UserResourceMock.prototype.createUser = function (userToCreate) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, __assign({ userId: 1 }, userToCreate)];
-            });
-        });
-    };
-    UserResourceMock.prototype.updateUser = function (userId, dataToUpdate) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, __assign({ userId: userId }, dataToUpdate)];
-            });
-        });
-    };
-    UserResourceMock.prototype.findUserByEmail = function (email) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (email === 'email@already.used') {
-                    return [2 /*return*/, {}];
+                        if (dataToUpdate.password) {
+                            if (!dataToUpdate.oldPassword) {
+                                throw new Error('missing_parameters');
+                            }
+                            if (!this.verifyPassword(dataToUpdate.oldPassword)) {
+                                throw new Error('invalid_old_password');
+                            }
+                            dataToUpdate.password = sha256(dataToUpdate.password + sha256(this.passwordSalt));
+                            delete dataToUpdate.oldPassword;
+                        }
+                        return [4 /*yield*/, this.userResource.updateUser(this.userId, dataToUpdate)];
+                    case 1:
+                        updatedData = _a.sent();
+                        this.updateData(updatedData);
+                        return [2 /*return*/];
                 }
-                return [2 /*return*/, null];
             });
         });
     };
-    UserResourceMock = __decorate([
-        inversify_1.injectable()
-    ], UserResourceMock);
-    return UserResourceMock;
+    User.prototype.export = function () {
+        return {
+            userId: this.userId,
+            email: this.email,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            age: this.age
+        };
+    };
+    User.prototype.verifyPassword = function (password) {
+        return this.password === sha256(password + sha256(this.passwordSalt));
+    };
+    User.prototype.updateData = function (userData) {
+        this.userId = userData.userId;
+        this.email = userData.email;
+        this.firstName = userData.firstName;
+        this.lastName = userData.lastName;
+        this.password = userData.password;
+        this.passwordSalt = userData.passwordSalt;
+        this.age = userData.age;
+    };
+    User = __decorate([
+        inversify_1.injectable(),
+        __metadata("design:paramtypes", [user_resource_1.UserResource, Object])
+    ], User);
+    return User;
 }());
-exports.default = UserResourceMock;
+exports.default = User;

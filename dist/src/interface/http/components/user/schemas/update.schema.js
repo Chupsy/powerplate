@@ -21,7 +21,12 @@ exports.userUpdateSchema = {
         age: joi_1.number()
             .min(1)
             .precision(0)
-            .optional()
+            .optional(),
+        password: joi_1.string()
+            .min(6)
+            .optional(),
+        oldPassword: joi_1.string().optional()
     })
-        .or('email', 'firstName', 'lastName', 'age')
+        .or('email', 'firstName', 'lastName', 'age', 'password')
+        .with('password', 'oldPassword')
 };

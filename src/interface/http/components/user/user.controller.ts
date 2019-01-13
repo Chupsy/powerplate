@@ -171,6 +171,7 @@ export class UserController implements interfaces.Controller {
      * @apiParam {String} firstName User firstName.
      * @apiParam {String} lastName  User lastName.
      * @apiParam {Number} age       User age.
+     * @apiParam {String} password  User password.
      *
      * @apiSuccess {String} code            request status code.
      * @apiSuccess {Number} status          request status.
@@ -227,11 +228,13 @@ export class UserController implements interfaces.Controller {
      * @apiName UpdateUser
      * @apiGroup User
      *
-     * @apiParam {number} userId    User Id.
-     * @apiParam {String} [email]     User email.
-     * @apiParam {String} [firstName] User firstName.
-     * @apiParam {String} [lastName]  User lastName.
-     * @apiParam {Number} [age]       User age.
+     * @apiParam {number} userId        User Id.
+     * @apiParam {String} [email]       User email.
+     * @apiParam {String} [firstName]   User firstName.
+     * @apiParam {String} [lastName]    User lastName.
+     * @apiParam {Number} [age]         User age.
+     * @apiParam {String} [password]    User new password.
+     * @apiParam {String} [oldPassword] User old password.
      *
      * @apiSuccess {String} code            request status code.
      * @apiSuccess {Number} status          request status.

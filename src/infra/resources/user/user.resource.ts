@@ -13,12 +13,14 @@ export abstract class UserResource {
         firstName: string;
         lastName: string;
         age: number;
+        password: string;
+        passwordSalt: string;
     }): Promise<IUser> {
         throw new Error('no_implemented_yet');
     }
     public updateUser(
         userId: number,
-        dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number }
+        dataToUpdate: { email?: string; firstName?: string; lastName?: string; age?: number; password?: string }
     ): Promise<IUser> {
         throw new Error('no_implemented_yet');
     }
@@ -33,4 +35,6 @@ export interface IUser {
     firstName: string;
     lastName: string;
     age: number;
+    password: string;
+    passwordSalt: string;
 }
