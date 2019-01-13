@@ -154,6 +154,7 @@ describe('User App', () => {
         expect(updatedUser.userId).equal(1);
         expect(updatedUser.firstName).equal('test');
         expect(updatedUser.lastName).equal('test');
+        expect(updatedUser.age).equal(12);
     });
     it('should not allow updateUser if old password is invalid', async () => {
         let dataToUpdate = {
