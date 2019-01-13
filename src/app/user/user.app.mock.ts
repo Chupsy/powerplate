@@ -43,4 +43,8 @@ export default class UserFactoryMock implements UserFactory {
     public async verifyEmail(): Promise<void> {
         return null;
     }
+
+    public async authenticateUser(): Promise<object> {
+        return null;
+    }
 }

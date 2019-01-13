@@ -52,85 +52,76 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var mongoose = require("mongoose");
 var inversify_1 = require("inversify");
-var sha256 = require("sha256");
-var UserResourceMock = /** @class */ (function () {
-    function UserResourceMock() {
+exports.Oauth2TokenSchema = new mongoose.Schema({
+    accessToken: { type: String, required: true, trim: true },
+    refreshToken: { type: String, required: true, trim: true },
+    rememberMe: { type: Boolean, required: true },
+    accessTokenExpirationDate: { type: Date, required: true },
+    userId: { type: Number, required: true, unique: true, min: 0 },
+    deletedAt: { type: Date, required: true }
+});
+var Oauth2TokenInfra = /** @class */ (function () {
+    function Oauth2TokenInfra() {
     }
-    UserResourceMock.prototype.findUserById = function (userId) {
+    Oauth2TokenInfra.prototype.init = function (db) {
+        this.Oauth2Token = db.model('Oauth2Token', exports.Oauth2TokenSchema);
+    };
+    Oauth2TokenInfra.prototype.findToken = function (tokenData) {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (userId !== 1) {
-                    return [2 /*return*/, null];
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.convertDocumentToIToken;
+                        return [4 /*yield*/, this.Oauth2Token.findOne(__assign({}, tokenData, { deletedAt: null }))];
+                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
                 }
-                return [2 /*return*/, {
-                        userId: 1,
-                        firstName: 'fName',
-                        lastName: 'lName',
-                        age: 12,
-                        email: 'valid@user.com',
-                        password: sha256('azerty' + sha256('1234AZER')),
-                        passwordSalt: '1234AZER'
-                    }];
             });
         });
     };
-    UserResourceMock.prototype.findAllUsers = function () {
+    Oauth2TokenInfra.prototype.destroyToken = function (accessToken) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, [
-                        {
-                            userId: 1
-                        },
-                        {
-                            userId: 2
-                        }
-                    ]];
-            });
-        });
-    };
-    UserResourceMock.prototype.deleteUserById = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    UserResourceMock.prototype.createUser = function (userToCreate) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, __assign({ userId: 1 }, userToCreate)];
-            });
-        });
-    };
-    UserResourceMock.prototype.updateUser = function (userId, dataToUpdate) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, __assign({ userId: userId, firstName: 'fName', lastName: 'lName', age: 12, email: 'valid@user.com', password: sha256('azerty' + sha256('1234AZER')), passwordSalt: '1234AZER' }, dataToUpdate)];
-            });
-        });
-    };
-    UserResourceMock.prototype.findUserByEmail = function (email) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (email === 'email@already.used') {
-                    return [2 /*return*/, {
-                            userId: 5,
-                            firstName: 'fName',
-                            lastName: 'lName',
-                            age: 12,
-                            email: 'email@already.used',
-                            password: sha256('azerty' + sha256('1234AZER')),
-                            passwordSalt: '1234AZER'
-                        }];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.Oauth2Token.findOneAndUpdate({ accessToken: accessToken }, { deletedAt: new Date() })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                return [2 /*return*/, null];
             });
         });
     };
-    UserResourceMock = __decorate([
+    Oauth2TokenInfra.prototype.createToken = function (tokenData) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.convertDocumentToIToken;
+                        return [4 /*yield*/, this.Oauth2Token.create(__assign({}, tokenData, { deletedAt: null }))];
+                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
+                }
+            });
+        });
+    };
+    Oauth2TokenInfra.prototype.convertDocumentToIToken = function (token) {
+        if (!token) {
+            return null;
+        }
+        var convertedToken = token.toObject();
+        return {
+            accessToken: convertedToken.accessToken,
+            refreshToken: convertedToken.refreshToken,
+            rememberMe: convertedToken.rememberMe,
+            accessTokenExpirationDate: convertedToken.accessTokenExpirationDate,
+            userId: convertedToken.userId
+        };
+    };
+    Oauth2TokenInfra = __decorate([
         inversify_1.injectable()
-    ], UserResourceMock);
-    return UserResourceMock;
+    ], Oauth2TokenInfra);
+    return Oauth2TokenInfra;
 }());
-exports.default = UserResourceMock;
+exports.Oauth2TokenInfra = Oauth2TokenInfra;

@@ -81,4 +81,16 @@ export default class UserApp {
             throw new Error('email_already_used');
         }
     }
+
+    public async authenticateUser(email: string, password: string): Promise<object> {
+        let foundUser = await this.userResource.findUserByEmail(email);
+        if (!foundUser) {
+            throw new Error('authentication_failed');
+        }
+        const user = new User(this.userResource, foundUser);
+        if (!user.verifyPassword(password)) {
+            throw new Error('authentication_failed');
+        }
+        return user;
+    }
 }

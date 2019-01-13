@@ -179,6 +179,26 @@ var UserApp = /** @class */ (function () {
             });
         });
     };
+    UserApp.prototype.authenticateUser = function (email, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var foundUser, user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userResource.findUserByEmail(email)];
+                    case 1:
+                        foundUser = _a.sent();
+                        if (!foundUser) {
+                            throw new Error('authentication_failed');
+                        }
+                        user = new user_1.default(this.userResource, foundUser);
+                        if (!user.verifyPassword(password)) {
+                            throw new Error('authentication_failed');
+                        }
+                        return [2 /*return*/, user];
+                }
+            });
+        });
+    };
     UserApp = __decorate([
         inversify_1.injectable(),
         __param(0, inversify_1.inject(identifiers_1.default.UserResource)),

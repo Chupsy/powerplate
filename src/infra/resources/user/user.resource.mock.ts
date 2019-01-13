@@ -59,7 +59,15 @@ export default class UserResourceMock implements UserResource {
     }
     public async findUserByEmail(email: string): Promise<any> {
         if (email === 'email@already.used') {
-            return {};
+            return {
+                userId: 5,
+                firstName: 'fName',
+                lastName: 'lName',
+                age: 12,
+                email: 'email@already.used',
+                password: sha256('azerty' + sha256('1234AZER')),
+                passwordSalt: '1234AZER'
+            };
         }
         return null;
     }

@@ -35,36 +35,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var inversify_1 = require("inversify");
-require("reflect-metadata");
-var identifiers_1 = require("../identifiers");
-var user_infra_1 = require("./user/user.infra");
-var mongoose = require("mongoose");
-var oauth2_token_infra_1 = require("./oauth2_token/oauth2_token.infra");
-exports.mongodbInfraModule = new inversify_1.ContainerModule(function (bind) {
-    bind(identifiers_1.default.UserResource)
-        .to(user_infra_1.UserInfra)
-        .inSingletonScope();
-    bind(identifiers_1.default.Oauth2TokenResource)
-        .to(oauth2_token_infra_1.Oauth2TokenInfra)
-        .inSingletonScope();
-});
-function start(container, config) {
-    return __awaiter(this, void 0, void 0, function () {
-        var userInfra, oauth2Token;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, mongoose.connect(config.uri, { useNewUrlParser: true })];
-                case 1:
-                    _a.sent();
-                    userInfra = container.get(identifiers_1.default.UserResource);
-                    oauth2Token = container.get(identifiers_1.default.Oauth2TokenResource);
-                    userInfra.init(mongoose);
-                    oauth2Token.init(mongoose);
-                    console.log('database ready');
-                    return [2 /*return*/];
-            }
+var passport = require("passport");
+var localStrategy = require("passport-local");
+function configure(userApp) {
+    passport.use('local', new localStrategy.Strategy(function (username, password, done) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, userApp.authenticateUser(username, password)];
+                    case 1:
+                        user = _a.sent();
+                        return [2 /*return*/, done(null, user)];
+                }
+            });
         });
-    });
+    }));
 }
-exports.start = start;
+exports.configure = configure;

@@ -106,7 +106,7 @@ describe('User App', () => {
             lastName: 'test',
             age: 12,
             password: 'azerty',
-            oldPassword: 'ytreza'
+            oldPassword: 'azerty'
         };
         try {
             await userApp.updateUser(1, dataToUpdate);
@@ -185,5 +185,29 @@ describe('User App', () => {
         } catch (error) {
             expect(error.message).equal('missing_parameters');
         }
+    });
+
+    describe('authenticateUser', function() {
+        it('should allow authenticate user if data is valid', async () => {
+            let authenticatedUser: any = await userApp.authenticateUser('email@already.used', 'azerty');
+            expect(authenticatedUser.userId).equal(5);
+            expect(authenticatedUser.email).equal('email@already.used');
+        });
+        it('should not allow authenticate user if data is not valid', async () => {
+            try {
+                await userApp.authenticateUser('email@already.used', 'qwerty');
+                assert.fail('factory should throw an error if password is wrong');
+            } catch (error) {
+                expect(error.message).equal('authentication_failed');
+            }
+        });
+        it('should not allow authenticate user if user does not exist', async () => {
+            try {
+                await userApp.authenticateUser('email@notalready.used', 'qwerty');
+                assert.fail('factory should throw an error if password is wrong');
+            } catch (error) {
+                expect(error.message).equal('authentication_failed');
+            }
+        });
     });
 });
