@@ -59,6 +59,7 @@ var response_1 = require("../../constants/response");
 var create_schema_1 = require("./schemas/create.schema");
 var update_schema_1 = require("./schemas/update.schema");
 var delete_schema_1 = require("./schemas/delete.schema");
+var authenticate_schema_1 = require("./schemas/authenticate.schema");
 var UserController = /** @class */ (function () {
     function UserController(userApp) {
         this.userApp = userApp;
@@ -356,6 +357,15 @@ var UserController = /** @class */ (function () {
      *       "status": 400,
      *       "message": "Email already in use."
      *   }
+     *
+     * @apiError invalid_old_password Invalid old password.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_old_password",
+     *       "status": 400,
+     *       "message": "Invalid old password."
+     *   }
      */
     UserController.prototype.updateUser = function (id, req, res) {
         return __awaiter(this, void 0, void 0, function () {
@@ -366,6 +376,85 @@ var UserController = /** @class */ (function () {
                     case 1:
                         user = _a.sent();
                         response_normalizer_1.default(res, response_1.ResponseCodes.USER_UPDATED, user);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * @api {post} /user/authenticate Authenticate user
+     * @apiName AuthenticateUser
+     * @apiGroup User
+     *
+     * @apiParam {String} strategy              Auth strategy (LOCAL | BEARER_TOKEN).
+     * @apiParam {Object} authData              Auth data.
+     * @apiParam {String} authData.email        User email.
+     * @apiParam {String} authData.password     User password.
+     * @apiParam {String} authData.bearerToken  User bearer token.
+     *
+     * @apiSuccess {String} code            request status code.
+     * @apiSuccess {Number} status          request status.
+     * @apiSuccess {String} message         request message.
+     * @apiSuccess {Object} data            request data.
+     * @apiSuccess {Number} data.userId     User unique Id.
+     * @apiSuccess {String} data.firstName  User first name.
+     * @apiSuccess {String} data.lastName   User last name.
+     * @apiSuccess {Number} data.age        User age.
+     * @apiSuccess {String} data.email      User email.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/2 200 OK
+     *   {
+     *       "code": "user_authenticated",
+     *       "status": 201,
+     *       "message": "User authenticated.",
+     *       "data": {
+     *           "userId": 1,
+     *           "firstName": "John",
+     *           "lastName": "Doe",
+     *           "age": 20,
+     *           "email": "john@doe.com",
+     *       }
+     *   }
+     *
+     *
+     * @apiError invalid_parameters Invalid parameters.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_parameters",
+     *       "status": 400,
+     *       "message": "\"userId\" must be a number"
+     *   }
+     *
+     *
+     * @apiError invalid_password Invalid password.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_password",
+     *       "status": 400,
+     *       "message": "Invalid password."
+     *   }
+     *
+     * @apiError data_not_found Data was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "data_not_found",
+     *       "status": 404,
+     *       "message": "Data was not found."
+     *   }
+     */
+    UserController.prototype.authenticateUser = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userApp.authenticateUser({ email: req.body.authData.email, password: req.body.authData.password }, req.body.strategy)];
+                    case 1:
+                        user = _a.sent();
+                        response_normalizer_1.default(res, response_1.ResponseCodes.USER_AUTHENTICATED, user);
                         return [2 /*return*/];
                 }
             });
@@ -408,6 +497,13 @@ var UserController = /** @class */ (function () {
         __metadata("design:paramtypes", [Number, Object, Object]),
         __metadata("design:returntype", Promise)
     ], UserController.prototype, "updateUser", null);
+    __decorate([
+        inversify_express_utils_1.httpPost('/authenticate', celebrate_1.celebrate(authenticate_schema_1.userAuthenticateSchema)),
+        __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", Promise)
+    ], UserController.prototype, "authenticateUser", null);
     UserController = __decorate([
         inversify_express_utils_1.controller('/users'),
         __param(0, inversify_1.inject(identifiers_1.default.UserApp)),

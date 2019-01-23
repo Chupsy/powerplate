@@ -13,7 +13,9 @@ var ResponseCodes;
     ResponseCodes["INTERNAL_SERVER_ERROR"] = "internal_server_error";
     ResponseCodes["INVALID_AGE"] = "invalid_age";
     ResponseCodes["INVALID_OLD_PASSWORD"] = "invalid_old_password";
+    ResponseCodes["INVALID_PASSWORD"] = "invalid_password";
     ResponseCodes["INVALID_JSON_INPUT"] = "invalid_json_input";
+    ResponseCodes["USER_AUTHENTICATED"] = "user_authenticated";
 })(ResponseCodes = exports.ResponseCodes || (exports.ResponseCodes = {}));
 exports.responseList = new Map([
     [
@@ -110,6 +112,22 @@ exports.responseList = new Map([
             code: 'invalid_old_password',
             status: 400,
             message: 'Invalid old password.'
+        }
+    ],
+    [
+        ResponseCodes.USER_AUTHENTICATED,
+        {
+            code: 'user_authenticated',
+            status: 200,
+            message: 'User authenticated.'
+        }
+    ],
+    [
+        ResponseCodes.INVALID_PASSWORD,
+        {
+            code: 'invalid_password',
+            status: 200,
+            message: 'Invalid password.'
         }
     ]
 ]);

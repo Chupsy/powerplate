@@ -4,6 +4,7 @@ import { UserResource } from '../../infra/resources/user/user.resource';
 import User from './user';
 import * as crypto from 'crypto';
 import sha256 = require('sha256');
+import { AUTHENTICATION_STRATEGY } from '../constants/strategies';
 
 @injectable()
 export default class UserApp {
@@ -82,15 +83,21 @@ export default class UserApp {
         }
     }
 
-    public async authenticateUser(email: string, password: string): Promise<object> {
-        let foundUser = await this.userResource.findUserByEmail(email);
-        if (!foundUser) {
-            throw new Error('authentication_failed');
+    public async authenticateUser(
+        authData: { email?: string; password?: string; bearerToken?: string },
+        strategy: AUTHENTICATION_STRATEGY
+    ): Promise<object> {
+        if (strategy === AUTHENTICATION_STRATEGY.LOCAL && authData.email && authData.password) {
+            let foundUser = await this.userResource.findUserByEmail(authData.email);
+            if (!foundUser) {
+                throw new Error('data_not_found');
+            }
+            const user = new User(this.userResource, foundUser);
+            if (!user.verifyPassword(authData.password)) {
+                throw new Error('invalid_password');
+            }
+            return user;
         }
-        const user = new User(this.userResource, foundUser);
-        if (!user.verifyPassword(password)) {
-            throw new Error('authentication_failed');
-        }
-        return user;
+        throw new Error('invalid_parameters');
     }
 }

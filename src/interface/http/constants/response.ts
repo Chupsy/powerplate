@@ -10,7 +10,9 @@ export enum ResponseCodes {
     INTERNAL_SERVER_ERROR = 'internal_server_error',
     INVALID_AGE = 'invalid_age',
     INVALID_OLD_PASSWORD = 'invalid_old_password',
-    INVALID_JSON_INPUT = 'invalid_json_input'
+    INVALID_PASSWORD = 'invalid_password',
+    INVALID_JSON_INPUT = 'invalid_json_input',
+    USER_AUTHENTICATED = 'user_authenticated'
 }
 
 export const responseList = new Map<string, ApiResponse>([
@@ -108,6 +110,22 @@ export const responseList = new Map<string, ApiResponse>([
             code: 'invalid_old_password',
             status: 400,
             message: 'Invalid old password.'
+        }
+    ],
+    [
+        ResponseCodes.USER_AUTHENTICATED,
+        {
+            code: 'user_authenticated',
+            status: 200,
+            message: 'User authenticated.'
+        }
+    ],
+    [
+        ResponseCodes.INVALID_PASSWORD,
+        {
+            code: 'invalid_password',
+            status: 200,
+            message: 'Invalid password.'
         }
     ]
 ]);

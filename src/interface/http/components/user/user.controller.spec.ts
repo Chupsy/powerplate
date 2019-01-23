@@ -127,4 +127,30 @@ describe('userController', () => {
             );
         });
     });
+
+    describe('POST /users/authenticate', () => {
+        it('should authenticate with password properly', async () => {
+            const expectedResponse: ApiResponse = responseList.get(ResponseCodes.USER_AUTHENTICATED);
+            resMock.registerCallback((apiResponse: any, statusNumber: number) => {
+                expect(statusNumber).equal(expectedResponse.status);
+                expect(apiResponse.status).equal(expectedResponse.status);
+                expect(apiResponse.code).equal(expectedResponse.code);
+                expect(apiResponse.message).equal(expectedResponse.message);
+                expect(apiResponse.data.email).equal('test@test.com');
+                expect(apiResponse.data.userId).equal(1);
+            });
+            await userController.authenticateUser(
+                {
+                    body: {
+                        authData: {
+                            email: 'test@test.com',
+                            password: 'azerty'
+                        },
+                        strategy: 'LOCAL'
+                    }
+                },
+                resMock
+            );
+        });
+    });
 });

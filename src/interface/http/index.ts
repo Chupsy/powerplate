@@ -5,8 +5,6 @@ import { UserController } from './components/user/user.controller';
 import HTTP_INTERFACE_IDENTIFIERS from './identifiers';
 import momus from './middlewares/momus';
 import { Application } from 'express-serve-static-core';
-import * as passportConfig from './helpers/passport';
-import APP_IDENTIFIERS from '../../app/identifiers';
 let httpConfig: any;
 export let serverInstance: Application;
 
@@ -33,7 +31,6 @@ export function init(container: Container, config: any) {
         app.use(momus);
     });
     serverInstance = server.build();
-    passportConfig.configure(container.get(APP_IDENTIFIERS.UserApp));
     console.log('Server is ready');
 }
 export function start() {

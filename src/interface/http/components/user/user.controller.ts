@@ -20,6 +20,8 @@ import { ResponseCodes } from '../../constants/response';
 import { userCreateSchema } from './schemas/create.schema';
 import { userUpdateSchema } from './schemas/update.schema';
 import { userDeleteSchema } from './schemas/delete.schema';
+import { userAuthenticateSchema } from './schemas/authenticate.schema';
+import { AUTHENTICATION_STRATEGY } from '../../../../app/constants/strategies';
 
 @controller('/users')
 export class UserController implements interfaces.Controller {
@@ -287,6 +289,15 @@ export class UserController implements interfaces.Controller {
      *       "status": 400,
      *       "message": "Email already in use."
      *   }
+     *
+     * @apiError invalid_old_password Invalid old password.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_old_password",
+     *       "status": 400,
+     *       "message": "Invalid old password."
+     *   }
      */
     @httpPut('/:userId', celebrate(userUpdateSchema))
     public async updateUser(
@@ -296,5 +307,79 @@ export class UserController implements interfaces.Controller {
     ): Promise<void> {
         const user = await this.userApp.updateUser(id, req.body);
         responseNormalizer(res, ResponseCodes.USER_UPDATED, user);
+    }
+
+    /**
+     * @api {post} /user/authenticate Authenticate user
+     * @apiName AuthenticateUser
+     * @apiGroup User
+     *
+     * @apiParam {String} strategy              Auth strategy (LOCAL | BEARER_TOKEN).
+     * @apiParam {Object} authData              Auth data.
+     * @apiParam {String} authData.email        User email.
+     * @apiParam {String} authData.password     User password.
+     * @apiParam {String} authData.bearerToken  User bearer token.
+     *
+     * @apiSuccess {String} code            request status code.
+     * @apiSuccess {Number} status          request status.
+     * @apiSuccess {String} message         request message.
+     * @apiSuccess {Object} data            request data.
+     * @apiSuccess {Number} data.userId     User unique Id.
+     * @apiSuccess {String} data.firstName  User first name.
+     * @apiSuccess {String} data.lastName   User last name.
+     * @apiSuccess {Number} data.age        User age.
+     * @apiSuccess {String} data.email      User email.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/2 200 OK
+     *   {
+     *       "code": "user_authenticated",
+     *       "status": 201,
+     *       "message": "User authenticated.",
+     *       "data": {
+     *           "userId": 1,
+     *           "firstName": "John",
+     *           "lastName": "Doe",
+     *           "age": 20,
+     *           "email": "john@doe.com",
+     *       }
+     *   }
+     *
+     *
+     * @apiError invalid_parameters Invalid parameters.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_parameters",
+     *       "status": 400,
+     *       "message": "\"userId\" must be a number"
+     *   }
+     *
+     *
+     * @apiError invalid_password Invalid password.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "invalid_password",
+     *       "status": 400,
+     *       "message": "Invalid password."
+     *   }
+     *
+     * @apiError data_not_found Data was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *   {
+     *       "code": "data_not_found",
+     *       "status": 404,
+     *       "message": "Data was not found."
+     *   }
+     */
+    @httpPost('/authenticate', celebrate(userAuthenticateSchema))
+    public async authenticateUser(@request() req: express.Request, @response() res: express.Response): Promise<void> {
+        const user = await this.userApp.authenticateUser(
+            { email: req.body.authData.email, password: req.body.authData.password },
+            req.body.strategy
+        );
+        responseNormalizer(res, ResponseCodes.USER_AUTHENTICATED, user);
     }
 }

@@ -110,10 +110,20 @@ var UserFactoryMock = /** @class */ (function () {
             });
         });
     };
-    UserFactoryMock.prototype.authenticateUser = function () {
+    UserFactoryMock.prototype.authenticateUser = function (authData, strategy) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, null];
+                if (authData.email !== 'test@test.com') {
+                    throw new Error('data_not_found');
+                }
+                if (authData.password !== 'azerty') {
+                    throw new Error('invalid_password');
+                }
+                return [2 /*return*/, {
+                        userId: 1,
+                        email: 'test@test.com',
+                        age: 12
+                    }];
             });
         });
     };

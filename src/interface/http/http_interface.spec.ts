@@ -64,6 +64,16 @@ describe('Hello API Request', () => {
             });
     });
 
+    it('authenticate on POST /users/authenticate', () => {
+        return chai
+            .request(serverInstance)
+            .post('/users/authenticate')
+            .send({ authData: { email: 'test@test.com', password: 'azerty' }, strategy: 'LOCAL' })
+            .then(res => {
+                chai.expect(res.body.status).to.equal(200);
+            });
+    });
+
     it('should send joi errors properly on DELETE /users/:userId', () => {
         return chai
             .request(serverInstance)
@@ -96,6 +106,16 @@ describe('Hello API Request', () => {
         return chai
             .request(serverInstance)
             .post('/users')
+            .send({})
+            .then(res => {
+                chai.expect(res.body.status).to.equal(400);
+            });
+    });
+
+    it('should send joi errors properly on POST /users', () => {
+        return chai
+            .request(serverInstance)
+            .post('/users/authenticate')
             .send({})
             .then(res => {
                 chai.expect(res.body.status).to.equal(400);

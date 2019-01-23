@@ -7,6 +7,7 @@ import { Container } from 'inversify';
 import UserInfraMock from '../../infra/resources/user/user.resource.mock';
 import INFRA_IDENTIFIERS from '../../infra/identifiers';
 import { UserResource } from '../../infra/resources/user/user.resource';
+import { AUTHENTICATION_STRATEGY } from '../constants/strategies';
 let userApp: UserApp;
 beforeEach(() => {
     const container = new Container();
@@ -189,24 +190,44 @@ describe('User App', () => {
 
     describe('authenticateUser', function() {
         it('should allow authenticate user if data is valid', async () => {
-            let authenticatedUser: any = await userApp.authenticateUser('email@already.used', 'azerty');
+            let authenticatedUser: any = await userApp.authenticateUser(
+                { email: 'email@already.used', password: 'azerty' },
+                AUTHENTICATION_STRATEGY.LOCAL
+            );
             expect(authenticatedUser.userId).equal(5);
             expect(authenticatedUser.email).equal('email@already.used');
         });
         it('should not allow authenticate user if data is not valid', async () => {
             try {
-                await userApp.authenticateUser('email@already.used', 'qwerty');
+                await userApp.authenticateUser(
+                    { email: 'email@already.used', password: 'qwerty' },
+                    AUTHENTICATION_STRATEGY.LOCAL
+                );
                 assert.fail('factory should throw an error if password is wrong');
             } catch (error) {
-                expect(error.message).equal('authentication_failed');
+                expect(error.message).equal('invalid_password');
             }
         });
         it('should not allow authenticate user if user does not exist', async () => {
             try {
-                await userApp.authenticateUser('email@notalready.used', 'qwerty');
+                await userApp.authenticateUser(
+                    { email: 'email@notalready.used', password: 'qwerty' },
+                    AUTHENTICATION_STRATEGY.LOCAL
+                );
                 assert.fail('factory should throw an error if password is wrong');
             } catch (error) {
-                expect(error.message).equal('authentication_failed');
+                expect(error.message).equal('data_not_found');
+            }
+        });
+        it('should not allow authenticate user if invalid strategy with data', async () => {
+            try {
+                await userApp.authenticateUser(
+                    { email: 'email@notalready.used', password: 'qwerty' },
+                    AUTHENTICATION_STRATEGY.BEARER_TOKEN
+                );
+                assert.fail('factory should throw an error if invalid strategy with data');
+            } catch (error) {
+                expect(error.message).equal('invalid_parameters');
             }
         });
     });
