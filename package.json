@@ -37,7 +37,6 @@
         "test": "nyc mocha --reporter \"spec\" -r ts-node/register src/**/*.spec.ts ",
         "test:watch": "nyc mocha --reporter \"spec\" -r ts-node/register src/**/*.spec.ts --watch",
         "prettier": "prettier --write \"./{src,e2e}/**/*.{ts,js,scss}\"",
-        "postinstall": "npm run prettier -s",
         "build": "tsc -p ./",
         "start": "tsc -p ./ && node dist/src/index.js",
         "doc": "apidoc -f \".*\\.ts$\" -i src/ -o apidoc/",

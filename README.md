@@ -272,3 +272,12 @@ Methods :
 -   findUserByEmail
     -   arguments : email (string)
     -   return user as object
+
+
+# A INVESTIGUER
+traefik
+sudo docker run --name=mongodb -d -P mongo
+sudo docker run -ti -P --name app --link mongodb:mongodb chupsy/powerplate
+sudo docker rm app
+sudo docker build -t chupsy/powerplate .
+Docker compose
