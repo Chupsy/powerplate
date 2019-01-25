@@ -79,10 +79,7 @@ export class UserController implements interfaces.Controller {
      */
     @httpGet('/:userId', celebrate(userFindOneSchema))
     public async getUser(@requestParam('userId') id: number, @response() res: express.Response): Promise<void> {
-        const user: any = await this.userApp.findUserById(id);
-        if (user.userId > 55) {
-            user.userId = 48;
-        }
+        const user = await this.userApp.findUserById(id);
         responseNormalizer(res, ResponseCodes.USER_FOUND, user);
     }
 
