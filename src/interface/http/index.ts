@@ -5,7 +5,6 @@ import { UserController } from './components/user/user.controller';
 import HTTP_INTERFACE_IDENTIFIERS from './identifiers';
 import momus from './middlewares/momus';
 import { Application } from 'express-serve-static-core';
-
 let httpConfig: any;
 export let serverInstance: Application;
 

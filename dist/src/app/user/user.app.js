@@ -64,6 +64,7 @@ var user_resource_1 = require("../../infra/resources/user/user.resource");
 var user_1 = require("./user");
 var crypto = require("crypto");
 var sha256 = require("sha256");
+var strategies_1 = require("../constants/strategies");
 var UserApp = /** @class */ (function () {
     function UserApp(userResource) {
         this.userResource = userResource;
@@ -175,6 +176,29 @@ var UserApp = /** @class */ (function () {
                             throw new Error('email_already_used');
                         }
                         return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserApp.prototype.authenticateUser = function (authData, strategy) {
+        return __awaiter(this, void 0, void 0, function () {
+            var foundUser, user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(strategy === strategies_1.AUTHENTICATION_STRATEGY.LOCAL && authData.email && authData.password)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.userResource.findUserByEmail(authData.email)];
+                    case 1:
+                        foundUser = _a.sent();
+                        if (!foundUser) {
+                            throw new Error('data_not_found');
+                        }
+                        user = new user_1.default(this.userResource, foundUser);
+                        if (!user.verifyPassword(authData.password)) {
+                            throw new Error('invalid_password');
+                        }
+                        return [2 /*return*/, user];
+                    case 2: throw new Error('invalid_parameters');
                 }
             });
         });

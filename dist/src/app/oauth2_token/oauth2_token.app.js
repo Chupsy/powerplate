@@ -1,20 +1,15 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -53,83 +48,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inversify_1 = require("inversify");
-var UserFactoryMock = /** @class */ (function () {
-    function UserFactoryMock() {
+var identifiers_1 = require("../../infra/identifiers");
+var oauth2_token_resource_1 = require("../../infra/resources/oauth2_token/oauth2_token.resource");
+var Oauth2App = /** @class */ (function () {
+    function Oauth2App(oauth2TokenResource) {
+        this.oauth2TokenResource = oauth2TokenResource;
     }
-    UserFactoryMock.prototype.findUserById = function (userId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (userId !== 1) {
-                    throw new Error('data_not_found');
-                }
-                return [2 /*return*/, {
-                        userId: 1
-                    }];
-            });
-        });
-    };
-    UserFactoryMock.prototype.findAllUsers = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, [
-                        {
-                            userId: 1
-                        },
-                        {
-                            userId: 2
-                        }
-                    ]];
-            });
-        });
-    };
-    UserFactoryMock.prototype.deleteUserById = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        });
-    };
-    UserFactoryMock.prototype.createUser = function (userToCreate) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, __assign({ userId: 1 }, userToCreate)];
-            });
-        });
-    };
-    UserFactoryMock.prototype.updateUser = function (userId, dataToUpdate) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, __assign({ userId: userId }, dataToUpdate)];
-            });
-        });
-    };
-    UserFactoryMock.prototype.verifyEmail = function () {
+    Oauth2App.prototype.createToken = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, null];
             });
         });
     };
-    UserFactoryMock.prototype.authenticateUser = function (authData, strategy) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (authData.email !== 'test@test.com') {
-                    throw new Error('data_not_found');
-                }
-                if (authData.password !== 'azerty') {
-                    throw new Error('invalid_password');
-                }
-                return [2 /*return*/, {
-                        userId: 1,
-                        email: 'test@test.com',
-                        age: 12
-                    }];
-            });
-        });
-    };
-    UserFactoryMock = __decorate([
-        inversify_1.injectable()
-    ], UserFactoryMock);
-    return UserFactoryMock;
+    Oauth2App = __decorate([
+        inversify_1.injectable(),
+        __param(0, inversify_1.inject(identifiers_1.default.Oauth2TokenResource)),
+        __metadata("design:paramtypes", [oauth2_token_resource_1.Oauth2TokenResource])
+    ], Oauth2App);
+    return Oauth2App;
 }());
-exports.default = UserFactoryMock;
+exports.default = Oauth2App;

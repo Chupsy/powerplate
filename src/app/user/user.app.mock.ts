@@ -1,5 +1,6 @@
 import { injectable, inject } from 'inversify';
 import UserFactory from './user.app';
+import { AUTHENTICATION_STRATEGY } from '../constants/strategies';
 
 @injectable()
 export default class UserFactoryMock implements UserFactory {
@@ -42,5 +43,22 @@ export default class UserFactoryMock implements UserFactory {
     }
     public async verifyEmail(): Promise<void> {
         return null;
+    }
+
+    public async authenticateUser(
+        authData: { email: string; password: string },
+        strategy: AUTHENTICATION_STRATEGY
+    ): Promise<object> {
+        if (authData.email !== 'test@test.com') {
+            throw new Error('data_not_found');
+        }
+        if (authData.password !== 'azerty') {
+            throw new Error('invalid_password');
+        }
+        return {
+            userId: 1,
+            email: 'test@test.com',
+            age: 12
+        };
     }
 }
