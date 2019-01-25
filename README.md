@@ -1,4 +1,5 @@
 # Powerplate
+[![CircleCI](https://circleci.com/gh/Chupsy/powerplate.svg?style=shield)](https://circleci.com/gh/Chupsy/powerplate)
 
 ## Architecture
 
