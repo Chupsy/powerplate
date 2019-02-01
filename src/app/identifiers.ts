@@ -1,5 +1,5 @@
 const APP_IDENTIFIERS = {
     UserApp: Symbol.for('UserApp'),
-    Oauth2App: Symbol.for('Oauth2App')
+    AuthenticateApp: Symbol.for('AuthenticateApp')
 };
 export default APP_IDENTIFIERS;

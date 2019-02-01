@@ -3,7 +3,7 @@ import UserFactory from './user.app';
 import { AUTHENTICATION_STRATEGY } from '../constants/strategies';
 
 @injectable()
-export default class UserFactoryMock implements UserFactory {
+export class UserAppMock implements UserFactory {
     public async findUserById(userId: number): Promise<object> {
         if (userId !== 1) {
             throw new Error('data_not_found');
@@ -60,5 +60,25 @@ export default class UserFactoryMock implements UserFactory {
             email: 'test@test.com',
             age: 12
         };
+    }
+
+    public async findUserByEmail(email: string): Promise<any> {
+        if (email === 'valid@email.com') {
+            return {
+                userId: 1,
+                verifyPassword: function(password: string) {
+                    if (password === 'valid') {
+                        return true;
+                    }
+                    return false;
+                },
+                export: function(): any {
+                    return {
+                        userId: 1
+                    };
+                }
+            };
+        }
+        throw new Error('data_not_found');
     }
 }

@@ -100,4 +100,12 @@ export default class UserApp {
         }
         throw new Error('invalid_parameters');
     }
+
+    public async findUserByEmail(email: string): Promise<User> {
+        let foundUser = await this.userResource.findUserByEmail(email);
+        if (!foundUser) {
+            throw new Error('data_not_found');
+        }
+        return new User(this.userResource, foundUser);
+    }
 }
