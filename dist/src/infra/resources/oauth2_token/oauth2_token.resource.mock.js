@@ -6,22 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var inversify_1 = require("inversify");
-var Oauth2TokenResourceMock = /** @class */ (function () {
-    function Oauth2TokenResourceMock() {
+const inversify_1 = require("inversify");
+let Oauth2TokenResourceMock = class Oauth2TokenResourceMock {
+    findToken(tokenData) {
+        throw new Error('no_implemented_yet');
     }
-    Oauth2TokenResourceMock.prototype.findToken = function (tokenData) {
+    destroyToken(accessToken) {
         throw new Error('no_implemented_yet');
-    };
-    Oauth2TokenResourceMock.prototype.destroyToken = function (accessToken) {
-        throw new Error('no_implemented_yet');
-    };
-    Oauth2TokenResourceMock.prototype.createToken = function (tokenData) {
+    }
+    createToken(tokenData) {
         return null;
-    };
-    Oauth2TokenResourceMock = __decorate([
-        inversify_1.injectable()
-    ], Oauth2TokenResourceMock);
-    return Oauth2TokenResourceMock;
-}());
+    }
+};
+Oauth2TokenResourceMock = __decorate([
+    inversify_1.injectable()
+], Oauth2TokenResourceMock);
 exports.Oauth2TokenResourceMock = Oauth2TokenResourceMock;
