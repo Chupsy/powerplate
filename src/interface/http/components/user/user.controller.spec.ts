@@ -5,7 +5,7 @@ import { UserController } from './user.controller';
 import HTTP_INTERFACE_IDENTIFIERS from './../../identifiers';
 import 'mocha';
 import APP_IDENTIFIERS from '../../../../app/identifiers';
-import UserAppMock from '../../../../app/user/user.app.mock';
+import { UserAppMock } from '../../../../app/user/user.app.mock';
 import UserApp from '../../../../app/user/user.app';
 import { cleanUpMetadata } from 'inversify-express-utils';
 import { ApiResponse, responseList, ResponseCodes } from '../../constants/response';

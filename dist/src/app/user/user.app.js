@@ -203,6 +203,22 @@ var UserApp = /** @class */ (function () {
             });
         });
     };
+    UserApp.prototype.findUserByEmail = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var foundUser;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userResource.findUserByEmail(email)];
+                    case 1:
+                        foundUser = _a.sent();
+                        if (!foundUser) {
+                            throw new Error('data_not_found');
+                        }
+                        return [2 /*return*/, new user_1.default(this.userResource, foundUser)];
+                }
+            });
+        });
+    };
     UserApp = __decorate([
         inversify_1.injectable(),
         __param(0, inversify_1.inject(identifiers_1.default.UserResource)),

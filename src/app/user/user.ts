@@ -1,9 +1,7 @@
 import { injectable, inject } from 'inversify';
 
-import INFRA_IDENTIFIERS from '../../infra/identifiers';
 import * as sha256 from 'sha256';
 import { UserResource } from '../../infra/resources/user/user.resource';
-import { string } from 'joi';
 
 @injectable()
 export default class User {
