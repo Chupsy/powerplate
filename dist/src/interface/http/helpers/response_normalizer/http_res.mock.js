@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function resMock() {
-    var rm = {
+    let rm = {
         cb: null,
         statusNumber: null,
         registerCallback: function (cb) {

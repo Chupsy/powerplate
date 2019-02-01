@@ -1,26 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserResource = /** @class */ (function () {
-    function UserResource() {
+class UserResource {
+    findUserById(userId) {
+        throw new Error('no_implemented_yet');
     }
-    UserResource.prototype.findUserById = function (userId) {
+    findAllUsers() {
         throw new Error('no_implemented_yet');
-    };
-    UserResource.prototype.findAllUsers = function () {
+    }
+    deleteUserById(userId) {
         throw new Error('no_implemented_yet');
-    };
-    UserResource.prototype.deleteUserById = function (userId) {
+    }
+    createUser(userToCreate) {
         throw new Error('no_implemented_yet');
-    };
-    UserResource.prototype.createUser = function (userToCreate) {
+    }
+    updateUser(userId, dataToUpdate) {
         throw new Error('no_implemented_yet');
-    };
-    UserResource.prototype.updateUser = function (userId, dataToUpdate) {
+    }
+    findUserByEmail(email) {
         throw new Error('no_implemented_yet');
-    };
-    UserResource.prototype.findUserByEmail = function (email) {
-        throw new Error('no_implemented_yet');
-    };
-    return UserResource;
-}());
+    }
+}
 exports.UserResource = UserResource;

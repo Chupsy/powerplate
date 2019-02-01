@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var joi_1 = require("joi");
-var strategies_1 = require("../../../../../app/constants/strategies");
+const joi_1 = require("joi");
+const strategies_1 = require("../../../../../app/constants/strategies");
 exports.userAuthenticateSchema = {
     body: joi_1.object().keys({
         authData: joi_1.object()

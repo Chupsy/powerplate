@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.modelMock = {
     shouldReturnUserFindOne: true,
@@ -35,7 +24,7 @@ exports.modelMock = {
                 return;
             },
             findOneAndUpdate: function (opt, data) {
-                return formatObjectForModel(__assign({}, data, opt));
+                return formatObjectForModel(Object.assign({}, data, opt));
             },
             create: function (data) {
                 return formatObjectForModel(data);
@@ -44,7 +33,7 @@ exports.modelMock = {
     }
 };
 function formatObjectForModel(data) {
-    var user = __assign({}, data, { sort: function () { return user; }, toObject: function () {
+    let user = Object.assign({}, data, { sort: () => user, toObject: () => {
             if (exports.modelMock.shouldReturnUserFindOne) {
                 return data;
             }

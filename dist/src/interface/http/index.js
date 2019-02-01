@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var inversify_1 = require("inversify");
-var inversify_express_utils_1 = require("inversify-express-utils");
-var bodyParser = require("body-parser");
-var user_controller_1 = require("./components/user/user.controller");
-var identifiers_1 = require("./identifiers");
-var momus_1 = require("./middlewares/momus");
-var httpConfig;
-exports.httpInterfaceModule = new inversify_1.ContainerModule(function (bind) {
+const inversify_1 = require("inversify");
+const inversify_express_utils_1 = require("inversify-express-utils");
+const bodyParser = require("body-parser");
+const user_controller_1 = require("./components/user/user.controller");
+const identifiers_1 = require("./identifiers");
+const momus_1 = require("./middlewares/momus");
+let httpConfig;
+exports.httpInterfaceModule = new inversify_1.ContainerModule((bind) => {
     bind(identifiers_1.default.UserController)
         .to(user_controller_1.UserController)
         .inSingletonScope();
@@ -15,14 +15,14 @@ exports.httpInterfaceModule = new inversify_1.ContainerModule(function (bind) {
 // start the server
 function init(container, config) {
     httpConfig = config;
-    var server = new inversify_express_utils_1.InversifyExpressServer(container);
-    server.setConfig(function (app) {
+    let server = new inversify_express_utils_1.InversifyExpressServer(container);
+    server.setConfig(app => {
         app.use(bodyParser.urlencoded({
             extended: true
         }));
         app.use(bodyParser.json());
     });
-    server.setErrorConfig(function (app) {
+    server.setErrorConfig(app => {
         app.use(momus_1.default);
     });
     exports.serverInstance = server.build();
