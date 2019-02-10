@@ -21,7 +21,7 @@ describe('momus', () => {
             expect(response.data).be.undefined;
             done();
         });
-        momus(new Error('data_not_found'), null, resMock, null);
+        momus(new Error('data_not_found'), null, resMock);
     });
     it('should call response normalizer with joi errors if its a joi error', done => {
         const expectedResponse: ApiResponse = responseList.get(ResponseCodes.INVALID_PARAMETERS);
@@ -43,7 +43,7 @@ describe('momus', () => {
                     .required()
             }
         );
-        momus(result.error, null, resMock, null);
+        momus(result.error, null, resMock);
     });
     it('should call bypass if its not a joi error', done => {
         const expectedResponse: ApiResponse = responseList.get(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -66,7 +66,7 @@ describe('momus', () => {
             }
         );
         result.error.isJoi = false;
-        momus(result.error, null, resMock, null);
+        momus(result.error, null, resMock);
     });
 
     it('should call throw invalid json input if error is entity parse fail', done => {
@@ -79,6 +79,6 @@ describe('momus', () => {
             expect(response.data).be.undefined;
             done();
         });
-        momus({ type: 'entity.parse.failed' }, null, resMock, null);
+        momus({ type: 'entity.parse.failed' }, null, resMock);
     });
 });
