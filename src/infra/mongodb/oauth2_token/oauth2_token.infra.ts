@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import { injectable } from 'inversify';
-import { Oauth2TokenResource, IToken } from '../../resources/oauth2_token/oauth2_token.resource';
 
 export const Oauth2TokenSchema = new mongoose.Schema({
     accessToken: { type: String, required: true, trim: true },
@@ -11,8 +10,16 @@ export const Oauth2TokenSchema = new mongoose.Schema({
     deletedAt: { type: Date, required: true }
 });
 
+export interface IToken {
+    accessToken: string;
+    refreshToken: string;
+    rememberMe: boolean;
+    accessTokenExpirationDate: Date;
+    userId: number;
+}
+
 @injectable()
-export class Oauth2TokenInfra implements Oauth2TokenResource {
+export class Oauth2TokenInfra {
     private Oauth2Token: mongoose.Model<mongoose.Document, {}>;
 
     public init(db: any) {

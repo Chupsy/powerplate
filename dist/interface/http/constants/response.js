@@ -1,23 +1,25 @@
-export enum ResponseCodes {
-    USER_FOUND = 'user_found',
-    USERS_FOUND = 'users_found',
-    USER_UPDATED = 'user_updated',
-    USER_DELETED = 'user_deleted',
-    USER_CREATED = 'user_created',
-    DATA_NOT_FOUND = 'data_not_found',
-    EMAIL_ALREADY_USED = 'email_already_used',
-    INVALID_PARAMETERS = 'invalid_parameters',
-    INTERNAL_SERVER_ERROR = 'internal_server_error',
-    INVALID_AGE = 'invalid_age',
-    INVALID_OLD_PASSWORD = 'invalid_old_password',
-    INVALID_PASSWORD = 'invalid_password',
-    INVALID_JSON_INPUT = 'invalid_json_input',
-    USER_AUTHENTICATED = 'user_authenticated',
-    INVALID_TOKEN = 'invalid_token',
-    TOKEN_EXPIRED = 'token_expired'
-}
-
-export const responseList = new Map<string, ApiResponse>([
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var ResponseCodes;
+(function (ResponseCodes) {
+    ResponseCodes["USER_FOUND"] = "user_found";
+    ResponseCodes["USERS_FOUND"] = "users_found";
+    ResponseCodes["USER_UPDATED"] = "user_updated";
+    ResponseCodes["USER_DELETED"] = "user_deleted";
+    ResponseCodes["USER_CREATED"] = "user_created";
+    ResponseCodes["DATA_NOT_FOUND"] = "data_not_found";
+    ResponseCodes["EMAIL_ALREADY_USED"] = "email_already_used";
+    ResponseCodes["INVALID_PARAMETERS"] = "invalid_parameters";
+    ResponseCodes["INTERNAL_SERVER_ERROR"] = "internal_server_error";
+    ResponseCodes["INVALID_AGE"] = "invalid_age";
+    ResponseCodes["INVALID_OLD_PASSWORD"] = "invalid_old_password";
+    ResponseCodes["INVALID_PASSWORD"] = "invalid_password";
+    ResponseCodes["INVALID_JSON_INPUT"] = "invalid_json_input";
+    ResponseCodes["USER_AUTHENTICATED"] = "user_authenticated";
+    ResponseCodes["INVALID_TOKEN"] = "invalid_token";
+    ResponseCodes["TOKEN_EXPIRED"] = "token_expired";
+})(ResponseCodes = exports.ResponseCodes || (exports.ResponseCodes = {}));
+exports.responseList = new Map([
     [
         ResponseCodes.USER_FOUND,
         {
@@ -147,9 +149,3 @@ export const responseList = new Map<string, ApiResponse>([
         }
     ]
 ]);
-
-export type ApiResponse = {
-    code: string;
-    status: number;
-    message: string;
-};

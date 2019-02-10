@@ -3,26 +3,24 @@ import 'reflect-metadata';
 import INFRA_IDENTIFIERS from '../identifiers';
 import { UserInfra } from './user/user.infra';
 import * as mongoose from 'mongoose';
-import { UserResource } from '../resources/user/user.resource';
 import { Oauth2TokenInfra } from './oauth2_token/oauth2_token.infra';
-import { Oauth2TokenResource } from '../resources/oauth2_token/oauth2_token.resource';
 
 export const mongodbInfraModule = new ContainerModule((bind: interfaces.Bind) => {
-    bind<UserResource>(INFRA_IDENTIFIERS.UserResource)
+    bind<UserInfra>(INFRA_IDENTIFIERS.UserInfra)
         .to(UserInfra)
         .inSingletonScope();
-    bind<Oauth2TokenResource>(INFRA_IDENTIFIERS.Oauth2TokenResource)
+    bind<Oauth2TokenInfra>(INFRA_IDENTIFIERS.Oauth2TokenInfra)
         .to(Oauth2TokenInfra)
         .inSingletonScope();
 });
 
-export async function start(container: Container, config: any) {
+export async function start(container: Container, uri: string) {
     await mongoose.connect(
-        config.uri,
+        uri,
         { useNewUrlParser: true }
     );
-    let userInfra: UserInfra = container.get(INFRA_IDENTIFIERS.UserResource);
-    let oauth2Token: Oauth2TokenInfra = container.get(INFRA_IDENTIFIERS.Oauth2TokenResource);
+    let userInfra: UserInfra = container.get(INFRA_IDENTIFIERS.UserInfra);
+    let oauth2Token: Oauth2TokenInfra = container.get(INFRA_IDENTIFIERS.Oauth2TokenInfra);
     userInfra.init(mongoose);
     oauth2Token.init(mongoose);
     console.log('database ready');

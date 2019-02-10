@@ -5,7 +5,6 @@ import { UserController } from './components/user/user.controller';
 import HTTP_INTERFACE_IDENTIFIERS from './identifiers';
 import momus from './middlewares/momus';
 import { Application } from 'express-serve-static-core';
-let httpConfig: any;
 export let serverInstance: Application;
 
 export const httpInterfaceModule = new ContainerModule((bind: interfaces.Bind) => {
@@ -15,8 +14,7 @@ export const httpInterfaceModule = new ContainerModule((bind: interfaces.Bind) =
 });
 
 // start the server
-export function init(container: Container, config: any) {
-    httpConfig = config;
+export function init(container: Container) {
     let server = new InversifyExpressServer(container);
 
     server.setConfig(app => {
@@ -33,7 +31,7 @@ export function init(container: Container, config: any) {
     serverInstance = server.build();
     console.log('Server is ready');
 }
-export function start() {
+export function start(httpPort: number) {
     console.log('Server is listening');
-    return serverInstance.listen(httpConfig.port);
+    return serverInstance.listen(httpPort);
 }

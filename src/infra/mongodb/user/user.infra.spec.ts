@@ -41,7 +41,9 @@ describe('User Infra Mongodb', () => {
             email: 'email@test.com',
             age: 12,
             firstName: 'test',
-            lastName: 'test'
+            lastName: 'test',
+            password: 'password',
+            passwordSalt: 'salt'
         });
         expect(user.userId).equal(2);
     });
@@ -51,7 +53,9 @@ describe('User Infra Mongodb', () => {
             email: 'email@test.com',
             age: 12,
             firstName: 'test',
-            lastName: 'test'
+            lastName: 'test',
+            password: 'password',
+            passwordSalt: 'salt'
         });
         expect(user.userId).equal(1);
     });

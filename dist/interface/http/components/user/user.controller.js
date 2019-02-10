@@ -1,35 +1,36 @@
-import {
-    interfaces,
-    httpGet,
-    controller,
-    requestParam,
-    response,
-    httpDelete,
-    httpPost,
-    request,
-    httpPut
-} from 'inversify-express-utils';
-import { inject } from 'inversify';
-import APP_IDENTIFIERS from '../../../../app/identifiers';
-import { celebrate } from 'celebrate';
-import * as express from 'express';
-import { userFindOneSchema } from './schemas/read.schema';
-import responseNormalizer from '../../helpers/response_normalizer';
-import UserApp from '../../../../app/user/user.app';
-import { ResponseCodes } from '../../constants/response';
-import { userCreateSchema } from './schemas/create.schema';
-import { userUpdateSchema } from './schemas/update.schema';
-import { userDeleteSchema } from './schemas/delete.schema';
-import { userAuthenticateSchema } from './schemas/authenticate.schema';
-import { AuthenticateApp } from '../../../../app/authenticate/authenticate.app';
-
-@controller('/users')
-export class UserController implements interfaces.Controller {
-    constructor(
-        @inject(APP_IDENTIFIERS.UserApp) private userApp: UserApp,
-        @inject(APP_IDENTIFIERS.AuthenticateApp) private authenticateApp: AuthenticateApp
-    ) {}
-
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const inversify_express_utils_1 = require("inversify-express-utils");
+const inversify_1 = require("inversify");
+const identifiers_1 = require("../../../../app/identifiers");
+const celebrate_1 = require("celebrate");
+const express = require("express");
+const read_schema_1 = require("./schemas/read.schema");
+const response_normalizer_1 = require("../../helpers/response_normalizer");
+const user_app_1 = require("../../../../app/user/user.app");
+const response_1 = require("../../constants/response");
+const create_schema_1 = require("./schemas/create.schema");
+const update_schema_1 = require("./schemas/update.schema");
+const delete_schema_1 = require("./schemas/delete.schema");
+const authenticate_schema_1 = require("./schemas/authenticate.schema");
+const authenticate_app_1 = require("../../../../app/authenticate/authenticate.app");
+let UserController = class UserController {
+    constructor(userApp, authenticateApp) {
+        this.userApp = userApp;
+        this.authenticateApp = authenticateApp;
+    }
     /**
      * @api {get} /user/:userId Find user by id
      * @apiName GetUser
@@ -80,12 +81,10 @@ export class UserController implements interfaces.Controller {
      *       "message": "\"userId\" must be a number"
      *   }
      */
-    @httpGet('/:userId', celebrate(userFindOneSchema))
-    public async getUser(@requestParam('userId') id: number, @response() res: express.Response): Promise<void> {
+    async getUser(id, res) {
         const user = await this.userApp.findUserById(id);
-        responseNormalizer(res, ResponseCodes.USER_FOUND, user);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_FOUND, user);
     }
-
     /**
      * @api {get} /user Find all users
      * @apiName GetUsers
@@ -117,12 +116,10 @@ export class UserController implements interfaces.Controller {
      *   }
      *
      */
-    @httpGet('/')
-    public async getUsers(@response() res: express.Response): Promise<void> {
+    async getUsers(res) {
         const users = await this.userApp.findAllUsers();
-        responseNormalizer(res, ResponseCodes.USERS_FOUND, users);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USERS_FOUND, users);
     }
-
     /**
      * @api {delete} /user/:userId Delete user by id
      * @apiName DeleteUser
@@ -161,12 +158,10 @@ export class UserController implements interfaces.Controller {
      *       "message": "\"userId\" must be a number"
      *   }
      */
-    @httpDelete('/:userId', celebrate(userDeleteSchema))
-    public async deleteUser(@requestParam('userId') id: number, @response() res: express.Response): Promise<void> {
+    async deleteUser(id, res) {
         await this.userApp.deleteUserById(id);
-        responseNormalizer(res, ResponseCodes.USER_DELETED);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_DELETED);
     }
-
     /**
      * @api {post} /user Create user
      * @apiName CreateUser
@@ -222,12 +217,10 @@ export class UserController implements interfaces.Controller {
      *       "message": "Email already in use."
      *   }
      */
-    @httpPost('/', celebrate(userCreateSchema))
-    public async createUser(@request() req: express.Request, @response() res: express.Response): Promise<void> {
+    async createUser(req, res) {
         const user = await this.userApp.createUser(req.body);
-        responseNormalizer(res, ResponseCodes.USER_CREATED, user);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_CREATED, user);
     }
-
     /**
      * @api {put} /user/:userId Update user
      * @apiName UpdateUser
@@ -302,16 +295,10 @@ export class UserController implements interfaces.Controller {
      *       "message": "Invalid old password."
      *   }
      */
-    @httpPut('/:userId', celebrate(userUpdateSchema))
-    public async updateUser(
-        @requestParam('userId') id: number,
-        @request() req: express.Request,
-        @response() res: express.Response
-    ): Promise<void> {
+    async updateUser(id, req, res) {
         const user = await this.userApp.updateUser(id, req.body);
-        responseNormalizer(res, ResponseCodes.USER_UPDATED, user);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_UPDATED, user);
     }
-
     /**
      * @api {post} /user/authenticate Authenticate user
      * @apiName AuthenticateUser
@@ -377,24 +364,69 @@ export class UserController implements interfaces.Controller {
      *       "message": "Data was not found."
      *   }
      */
-    @httpPost('/authenticate', celebrate(userAuthenticateSchema))
-    public async authenticateUser(@request() req: express.Request, @response() res: express.Response): Promise<void> {
-        console.log(
-            {
-                email: req.body.authData.email,
-                password: req.body.authData.password,
-                bearerToken: req.body.authData.bearerToken
-            },
-            req.body.strategy
-        );
-        const user = await this.authenticateApp.authenticateByStrategy(
-            {
-                email: req.body.authData.email,
-                password: req.body.authData.password,
-                bearerToken: req.body.authData.bearerToken
-            },
-            req.body.strategy
-        );
-        responseNormalizer(res, ResponseCodes.USER_AUTHENTICATED, user);
+    async authenticateUser(req, res) {
+        console.log({
+            email: req.body.authData.email,
+            password: req.body.authData.password,
+            bearerToken: req.body.authData.bearerToken
+        }, req.body.strategy);
+        const user = await this.authenticateApp.authenticateByStrategy({
+            email: req.body.authData.email,
+            password: req.body.authData.password,
+            bearerToken: req.body.authData.bearerToken
+        }, req.body.strategy);
+        response_normalizer_1.default(res, response_1.ResponseCodes.USER_AUTHENTICATED, user);
     }
-}
+};
+__decorate([
+    inversify_express_utils_1.httpGet('/:userId', celebrate_1.celebrate(read_schema_1.userFindOneSchema)),
+    __param(0, inversify_express_utils_1.requestParam('userId')), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUser", null);
+__decorate([
+    inversify_express_utils_1.httpGet('/'),
+    __param(0, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUsers", null);
+__decorate([
+    inversify_express_utils_1.httpDelete('/:userId', celebrate_1.celebrate(delete_schema_1.userDeleteSchema)),
+    __param(0, inversify_express_utils_1.requestParam('userId')), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deleteUser", null);
+__decorate([
+    inversify_express_utils_1.httpPost('/', celebrate_1.celebrate(create_schema_1.userCreateSchema)),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "createUser", null);
+__decorate([
+    inversify_express_utils_1.httpPut('/:userId', celebrate_1.celebrate(update_schema_1.userUpdateSchema)),
+    __param(0, inversify_express_utils_1.requestParam('userId')),
+    __param(1, inversify_express_utils_1.request()),
+    __param(2, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "updateUser", null);
+__decorate([
+    inversify_express_utils_1.httpPost('/authenticate', celebrate_1.celebrate(authenticate_schema_1.userAuthenticateSchema)),
+    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "authenticateUser", null);
+UserController = __decorate([
+    inversify_express_utils_1.controller('/users'),
+    __param(0, inversify_1.inject(identifiers_1.default.UserApp)),
+    __param(1, inversify_1.inject(identifiers_1.default.AuthenticateApp)),
+    __metadata("design:paramtypes", [user_app_1.default,
+        authenticate_app_1.AuthenticateApp])
+], UserController);
+exports.UserController = UserController;
